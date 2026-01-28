@@ -109,20 +109,27 @@
         </div>
     </section>
 
-    <section class="content-section">
+    <section class="content-section" style="overflow: hidden;">
         <div class="section-header">
             <h3>Advance ticket sales</h3>
-            <a href="#" class="see-all">See all <i class="fa-solid fa-arrow-right"></i></a>
         </div>
-        <div class="movie-grid" id="advanceGrid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));"></div>
+        <div class="carousel-3d-wrapper">
+            <button class="nav-btn prev-btn" id="prevSlideBtnAdv"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="carousel-container" id="carouselTrackAdv"></div>
+            <button class="nav-btn next-btn" id="nextSlideBtnAdv"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
     </section>
 
-    <section class="content-section">
+    <section class="content-section" style="overflow: hidden;">
         <div class="section-header">
             <h3>Coming soon to XLV</h3>
             <a href="#" class="see-all">See all <i class="fa-solid fa-arrow-right"></i></a>
         </div>
-        <div class="movie-grid six-columns" id="comingSoonGrid"></div>
+        <div class="carousel-3d-wrapper">
+            <button class="nav-btn prev-btn" id="prevSlideBtnComing"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="carousel-container" id="carouselTrackComing"></div>
+            <button class="nav-btn next-btn" id="nextSlideBtnComing"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
     </section>
 
     <footer class="main-footer">
@@ -312,15 +319,13 @@
                 </div>
             </div>
 
-            <div class="filter-bar" style="flex-wrap: wrap; height: auto;">
-                <span class="filter-label">Filter:</span>
-                <button class="filter-btn active" data-filter="all">ALL</button>
-                <button class="filter-btn" data-filter="2D">2D</button>
-                <button class="filter-btn" data-filter="IMAX">IMAX</button>
-                <button class="filter-btn" data-filter="4DX">4DX</button>
-            </div>
+            <div class="filter-bar" id="ticketFilterBar" style="flex-wrap: wrap; height: auto;"></div>
 
             <div class="cinema-list" id="ticketCinemaList"></div>
+            
+            <div id="comingSoonMessage" class="hidden" style="padding: 50px; text-align: center; color: #888; font-style: italic;">
+                Coming Soon to XLV. Stay Tuned!
+            </div>
         </div>
     </div>
 
