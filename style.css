@@ -490,23 +490,36 @@ body.no-scroll { overflow: hidden !important; }
 
 /* === TRAILER MODAL STYLE === */
 /* Style untuk Wrapper Close Button Trailer */
-.trailer-close-wrapper {
-    position: absolute;
-    top: -40px; /* Di luar atas iframe */
-    right: 0;
-    z-index: 2005;
-}
-.close-trailer-btn {
-    font-size: 28px;
-    cursor: pointer;
-    color: white;
-    text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-    transition: 0.3s;
-}
-.close-trailer-btn:hover {
-    color: var(--primary);
-    transform: scale(1.1);
-}
+/* Trailer Modal - Pastikan Z-Index lebih tinggi dari Iframe */
+    #trailerModal { 
+        width: 100%; 
+        height: 100%; 
+        background: #000; 
+        padding: 0; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+    }
+    
+    .trailer-close-wrapper { 
+        top: 20px;       /* Beri jarak dari atas */
+        right: 20px;     /* Beri jarak dari kanan */
+        position: absolute; 
+        z-index: 9999 !important; /* Paksa agar selalu di atas video */
+        background: rgba(0,0,0,0.5); /* Background tipis agar terlihat di atas video */
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .close-trailer-btn {
+        font-size: 24px;
+        color: #fff;
+        pointer-events: auto; /* Pastikan bisa diklik */
+    }
 
 /* ================= MEDIA QUERIES (RESPONSIVENESS) ================= */
 
