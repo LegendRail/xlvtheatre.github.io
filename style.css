@@ -525,9 +525,24 @@ body.no-scroll { overflow: hidden !important; }
 /* --- MOBILE & TABLET PORTRAIT (Max 768px) --- */
 @media(max-width: 768px) {
     /* Navbar Adjustment */
-    .navbar { padding: 10px 15px; }
-    .nav-center-clock { display: none; } /* Hide clock to save space */
-    .nav-logo-img { height: 30px; }
+    .navbar { 
+        padding: 10px 15px; 
+        justify-content: space-between; 
+    }
+    
+    /* === FIX: CLOCK ON MOBILE === */
+    .nav-center-clock { 
+        display: block; /* Tampilkan Jam */
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 11px; /* Ukuran pas untuk mobile */
+        font-weight: 800;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    } 
+
+    .nav-logo-img { height: 20px; /* Logo XLV Lebih Kecil */ }
     .location-pill span { display: none; } /* Hide city name, only icon */
     .location-pill { padding: 8px; border-radius: 50%; }
     
@@ -538,8 +553,15 @@ body.no-scroll { overflow: hidden !important; }
     #btnPromoTrigger { font-size: 0; } /* Hide Text "Promo", show Icon only */
     #btnPromoTrigger i { font-size: 16px; margin: 0; }
     
-    /* Hero Section */
-    .hero-slider { height: 80vh; align-items: center; justify-content: center; padding-bottom: 0; }
+    /* === FIX: HERO SECTION MOBILE LAYOUT === */
+    /* Membuat konten turun ke bawah (mendekati menu) untuk mengisi ruang kosong */
+    .hero-slider { 
+        height: 80vh; 
+        align-items: flex-end; /* Konten rata bawah */
+        justify-content: center; 
+        padding-bottom: 120px; /* Memberi ruang agar tidak tertutup menu */
+    }
+    
     .hero-content { 
         text-align: center; 
         padding: 0 20px; 
@@ -547,13 +569,41 @@ body.no-scroll { overflow: hidden !important; }
         display: flex; 
         flex-direction: column; 
         align-items: center;
-        margin-top: 50px; /* Offset for Navbar */
+        margin-top: 0; /* Reset margin top */
     }
-    .hero-title { font-size: 32px; margin-bottom: 10px; }
-    .hero-meta { justify-content: center; margin-bottom: 15px; }
-    .hero-synopsis { font-size: 13px; -webkit-line-clamp: 4; margin-bottom: 25px; text-align: center;}
-    .hero-buttons { justify-content: center; width: 100%; }
-    .btn-hero-primary, .btn-hero-secondary { padding: 10px 20px; font-size: 13px; width: 45%; display: flex; justify-content: center; align-items: center; gap: 8px;}
+    
+    .hero-title { 
+        font-size: 32px; 
+        margin-bottom: 5px; /* Rapatkan jarak judul */
+    }
+    
+    .hero-meta { 
+        justify-content: center; 
+        margin-bottom: 10px; /* Rapatkan jarak meta */
+    }
+    
+    .hero-synopsis { 
+        font-size: 13px; 
+        -webkit-line-clamp: 4; 
+        margin-bottom: 15px; /* Rapatkan jarak sinopsis ke tombol */
+        text-align: center;
+    }
+    
+    .hero-buttons { 
+        justify-content: center; 
+        width: 100%; 
+        gap: 10px; /* Perkecil gap antar tombol */
+    }
+    
+    .btn-hero-primary, .btn-hero-secondary { 
+        padding: 10px 20px; 
+        font-size: 13px; 
+        width: 45%; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        gap: 8px;
+    }
     
     .hero-dots { 
         right: auto; 
@@ -562,9 +612,8 @@ body.no-scroll { overflow: hidden !important; }
         transform: translateX(-50%); 
         flex-direction: row; 
         top: auto; 
+        display: none; /* Sembunyikan dots di mobile agar lebih bersih (opsional) */
     }
-    .dot { width: 8px; height: 8px; }
-    .dot.active { width: 25px; height: 8px; }
 
     /* Quick Menu */
     .quick-menu-section { margin-top: -30px; padding: 0 10px; }
@@ -594,37 +643,68 @@ body.no-scroll { overflow: hidden !important; }
     .cinema-content, .ticket-content { height: calc(100% - 110px); }
     .cinema-header-nav { padding: 15px; }
     
-    /* Ticket Modal Detail View */
-    .tm-header-container { flex-direction: column; height: auto; min-height: auto; padding-top: 20px; }
+    /* === TICKET MODAL DETAIL VIEW (GAP FIX) === */
+    .tm-header-container { 
+        flex-direction: column; 
+        height: auto; 
+        min-height: auto; 
+        padding-top: 15px; 
+        padding-bottom: 0px !important; /* Hapus padding bawah */
+    }
+    
     .tm-content-flex { 
         flex-direction: column; 
         align-items: center; 
         text-align: center; 
-        padding: 20px; 
+        padding: 15px 20px 5px 20px; /* Padding bawah sangat kecil (5px) */
     }
-    .tm-poster-img { width: 120px; height: 180px; margin-bottom: 15px; box-shadow: 0 5px 20px #000; }
-    .tm-details { width: 100%; padding-bottom: 0; }
-    .tm-title-large { font-size: 24px; }
-    .tm-meta-row { justify-content: center; }
-    .tm-synopsis-text { max-width: 100%; display: block; font-size: 13px; }
-    .tm-action-area { width: 100%; justify-content: center; margin-top: 20px; }
-    .tm-trailer-btn { width: 100%; text-align: center; }
+    
+    .tm-poster-img { 
+        width: 100px; /* Perkecil poster sedikit */
+        height: 150px; 
+        margin-bottom: 10px; 
+        box-shadow: 0 5px 20px #000; 
+    }
+    
+    .tm-details { 
+        width: 100%; 
+        padding-bottom: 0; 
+        margin-bottom: 0;
+    }
+    
+    .tm-title-large { font-size: 22px; margin-bottom: 5px; }
+    .tm-meta-row { justify-content: center; margin-bottom: 10px; }
+    .tm-synopsis-text { 
+        max-width: 100%; 
+        display: block; 
+        font-size: 12px; 
+        -webkit-line-clamp: 3; /* Batasi 3 baris */
+    }
+    
+    /* === FIX: BUTTON WATCH TRAILER KE ATAS === */
+    .tm-action-area { 
+        width: 100%; 
+        justify-content: center; 
+        margin-top: 8px; /* Jarak atas tombol diperkecil */
+        margin-bottom: 0;
+    }
+    .tm-trailer-btn { width: 100%; text-align: center; padding: 8px 0; font-size: 13px; }
+
+    /* === FILTER BAR (Agar lebih nempel ke atas) === */
+    .filter-bar {
+        padding-top: 8px; /* Kurangi padding atas filter bar */
+    }
     
     /* Trailer Modal */
-    /* === FIX: REMOVE display: flex; SO IT REMAINS HIDDEN BY DEFAULT === */
     #trailerModal { 
         width: 100%; 
         background: #000; 
         padding: 0; 
         align-items: center; 
         justify-content: center; 
-        /* Removed display: flex; to allow default display: none to work */
     }
     
-    /* Only show flex when class 'show' is added */
-    #trailerModal.show {
-        display: flex;
-    }
+    #trailerModal.show { display: flex; }
 
     .trailer-close-wrapper { top: 10px; right: 10px; position: absolute; }
 
