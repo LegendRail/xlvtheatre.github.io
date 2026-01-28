@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinemaXLV - #LebihASIK di XLV</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="no-scroll"> 
+    
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-content">
+            <img src="XLV2.png" alt="XLV Loading" class="loading-logo">
+            <div class="loading-bar-container">
+                <div class="loading-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar" id="navbar">
+        <div class="nav-left">
+            <a href="index.html" class="logo-link">
+                <img src="XLV2.png" alt="CINEMA XLV" class="nav-logo-img">
+            </a>
+            
+            <div class="location-container">
+                <div class="location-pill glass-button" id="locationBtn">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span id="currentCity">BANDUNG</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-center-clock">
+            <span id="jakartaClock">00:00:00 WIB</span>
+        </div>
+        
+        <div class="nav-right">
+            <a href="#" class="nav-link glass-link" id="btnPromoTrigger"><i class="fa-solid fa-ticket"></i> Promo</a>
+            <a href="#" class="nav-link glass-link" id="btnLoginTrigger">Login</a>
+            <a href="#" class="btn-register" id="btnRegisterTrigger">Make an account</a>
+        </div>
+    </nav>
+
+    <header class="hero-slider" id="heroSlider">
+        <div class="hero-bg-container" id="heroBgContainer"></div>
+        <div class="hero-overlay-gradient"></div>
+        
+        <div class="hero-content" id="heroContentText">
+            <span class="now-showing-badge glass-badge">NOW SHOWING</span>
+            <h1 id="heroTitle" class="hero-title">LOADING...</h1>
+            <div class="hero-meta">
+                <span id="heroRating" class="tag-box warning">R13+</span>
+                <span id="heroDur" class="tag-box">0h 00m</span>
+                <span id="heroGenre" class="tag-box">Action / Adventure</span>
+            </div>
+            <p id="heroSynopsis" class="hero-synopsis">Loading content...</p>
+            <div class="hero-buttons">
+                <button class="btn-hero-primary" id="heroBuyBtn"><i class="fa-solid fa-ticket"></i> Buy Ticket</button>
+                <button class="btn-hero-secondary glass-button" id="heroTrailerBtn"><i class="fa-solid fa-play"></i> Watch Trailer</button>
+            </div>
+        </div>
+        
+        <div class="hero-dots" id="heroDots"></div>
+    </header>
+
+    <section class="quick-menu-section">
+        <div class="quick-menu glass-panel" id="quickMenuTarget">
+            <div class="menu-item" id="menuCinema">
+                <div class="icon-circle"><i class="fa-solid fa-film"></i></div>
+                <span>Cinema</span>
+            </div>
+            <div class="menu-item" id="menuTicket">
+                <div class="icon-circle"><i class="fa-solid fa-ticket-simple"></i></div>
+                <span>Tickets</span>
+            </div>
+            <div class="menu-item">
+                <div class="icon-circle"><i class="fa-solid fa-mug-hot"></i></div>
+                <span>n.Cafe</span>
+            </div>
+            <div class="menu-item">
+                <div class="icon-circle"><i class="fa-solid fa-couch"></i></div>
+                <span>Private</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="promo-section">
+        <div class="slider-container no-buttons">
+            <div class="promo-track-window" id="promoWindow">
+                <div class="promo-track infinite-scroll-untouchable" id="promoTrack"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content-section" style="overflow: hidden;">
+        <div class="section-header">
+            <h3>Now playing</h3>
+        </div>
+        
+        <div class="carousel-3d-wrapper">
+            <button class="nav-btn prev-btn" id="prevSlideBtn"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="carousel-container" id="carouselTrack"></div>
+            <button class="nav-btn next-btn" id="nextSlideBtn"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-header">
+            <h3>Advance ticket sales</h3>
+            <a href="#" class="see-all">See all <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="movie-grid" id="advanceGrid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));"></div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-header">
+            <h3>Coming soon to XLV</h3>
+            <a href="#" class="see-all">See all <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="movie-grid six-columns" id="comingSoonGrid"></div>
+    </section>
+
+    <footer class="main-footer">
+        <div class="footer-partners">
+            <img src="cinemapremiere.png" alt="The Premiere" class="partner-logo">
+            <img src="IMAXICONWHITE.png" alt="IMAX" class="partner-logo" style="height: 25px;">
+            <img src="4dx.png" alt="4DX" class="partner-logo">
+			<img src="dolbysurround.png" alt="Dolby Surround 7.1" class="partner-logo">
+        </div>
+        <div class="footer-nav-links">
+            <a href="#">About Us</a><span class="separator">|</span>
+            <a href="#">Legal Terms</a><span class="separator">|</span>
+            <a href="#">Careers</a><span class="separator">|</span>
+            <a href="#">Feedback</a><span class="separator">|</span>
+            <a href="#">Contact Us & FAQ</a>
+        </div>
+        <div class="footer-bottom-row">
+            <div class="footer-left-group">
+                <img src="XLV2.png" alt="CINEMA XLV" class="footer-logo-img">
+                <div class="copyright-text">COPYRIGHT © 2026. PT NTS CREATIVITY TBK. ALL RIGHTS RESERVED.</div>
+            </div>
+            <div class="footer-right-group">
+                <div class="footer-socials-mini">
+                    <a href="https://www.instagram.com/legendrail/" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.tiktok.com/@legendrail" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+                <div class="app-buttons-mini">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="store-badge-mini">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Download_on_the_App_Store_Badge.svg" alt="App Store" class="store-badge-mini">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <div class="modal-center glass-panel-modal" id="trailerModal" style="width: 900px; max-width: 95%; padding: 0; background: #000; overflow:hidden;">
+        <div style="position: relative; width: 100%; padding-top: 56.25%;"> 
+            <iframe id="trailerIframe" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:none;" 
+                src="" title="YouTube video player" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
+            <i class="fa-solid fa-xmark close-trailer-btn" id="closeTrailer" style="position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: white; text-shadow: 0 2px 5px rgba(0,0,0,0.8); z-index: 999;"></i>
+        </div>
+    </div>
+
+    <div class="modal-center glass-panel-modal auth-modal" id="promoModal">
+        <div class="modal-header">
+            <h3>Redeem Promo Code</h3>
+            <i class="fa-solid fa-xmark close-modal-btn" id="closePromo"></i>
+        </div>
+        <div class="auth-form" style="padding-top:20px;">
+            <p style="font-size:13px; color:#ccc; margin-bottom:15px;">Enter your unique promo code to get a special discount!</p>
+            <div class="input-wrapper">
+                <input type="text" id="promoCodeInput" class="auth-input" placeholder="Enter your code here...">
+            </div>
+            <button class="btn-auth-action" id="btnRedeemPromo">Redeem code</button>
+        </div>
+    </div>
+
+    <div class="modal-center glass-panel-modal" id="locationModal">
+        <div class="modal-header">
+            <h3>Select your location</h3>
+            <i class="fa-solid fa-xmark close-modal-btn" id="closeLocation"></i>
+        </div>
+        <div class="search-city-wrapper">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="locationSearchInput" placeholder="Search city..." class="search-city-input">
+        </div>
+        <div class="city-grid-container" id="cityListContainer">
+            <button class="city-btn active" onclick="selectCity('BANDUNG', this)">BANDUNG <i class="fa-solid fa-check check-icon"></i></button>
+            <button class="city-btn" onclick="selectCity('SUBANG', this)">SUBANG <i class="fa-solid fa-check check-icon"></i></button>
+            <button class="city-btn" onclick="selectCity('CIREBON', this)">CIREBON <i class="fa-solid fa-check check-icon"></i></button>
+            <button class="city-btn" onclick="selectCity('GARUT', this)">GARUT <i class="fa-solid fa-check check-icon"></i></button>
+        </div>
+    </div>
+
+    <div class="modal-center glass-panel-modal auth-modal" id="loginModal">
+        <div class="auth-header-center">
+            <h2 class="ntix-brand">n.tix</h2>
+            <p class="auth-subtitle">Hey, Welcome back!</p>
+        </div>
+        <div class="auth-form">
+            <div class="input-wrapper">
+                <input type="tel" id="loginPhone" class="auth-input" placeholder="Telephone" maxlength="16">
+            </div>
+            <div class="input-wrapper">
+                <input type="password" id="loginPinInput" class="auth-input" placeholder="PIN" maxlength="6">
+                <i class="fa-solid fa-eye-slash toggle-password" id="toggleLoginPin"></i>
+            </div>
+            <button class="btn-auth-action" id="btnLoginAction">Login</button>
+            <div class="auth-footer-links">
+                <a href="#" class="link-forgot">Forgot PIN?</a>
+                <p class="link-create">Don't have account yet? <a href="#" id="linkToRegister">Let's Make it first!</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-center glass-panel-modal auth-modal" id="registerModal">
+         <div class="auth-header-left">
+             <i class="fa-solid fa-arrow-left back-icon" id="closeRegister"></i>
+             <h3>Make your n.tix</h3>
+         </div>
+        <div class="auth-form">
+            <div class="input-wrapper"><input type="text" id="registerName" class="auth-input" placeholder="Full Name"></div>
+            <div class="input-wrapper">
+                <input type="tel" id="registerPhone" class="auth-input" placeholder="Telephone (Max 16 digit)" maxlength="16">
+            </div>
+
+            <div class="input-wrapper">
+                <input type="email" id="registerEmail" class="auth-input" placeholder="Email (@gmail.com)">
+            </div>
+            <div class="gender-section">
+                <label class="input-label">Gender</label>
+                <div class="gender-options">
+                    <label class="radio-container">Male<input type="radio" name="gender" value="male"><span class="radio-checkmark"></span></label>
+                    <label class="radio-container">Female<input type="radio" name="gender" value="female"><span class="radio-checkmark"></span></label>
+                </div>
+            </div>
+            <div class="input-wrapper">
+                <input type="text" id="registerDob" class="auth-input" placeholder="DD/MM/YYYY">
+                <i class="fa-regular fa-calendar input-icon-right" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #777;"></i>
+            </div>
+            <button class="btn-auth-action" id="btnRegisterAction">Continue</button>
+        </div>
+    </div>
+
+    <div class="cinema-modal glass-panel-modal" id="cinemaModal">
+        <div class="cinema-header-nav">
+            <i class="fa-solid fa-arrow-left cinema-close" id="closeCinema"></i>
+            <div style="margin-left:15px;">
+                <span style="font-size:11px; color:#aaa; display:block;">Home / <strong style="color:#fff;">Cinema</strong></span>
+                <strong id="cinemaModalTitle" style="font-size:18px;">XLV Cinema</strong>
+            </div>
+        </div>
+        <div class="cinema-search-bar">
+             <i class="fa-solid fa-magnifying-glass"></i>
+             <input type="text" id="cinemaSearchInput" placeholder="Find Cinema in BANDUNG" class="cinema-input-search">
+        </div>
+        <div class="cinema-content">
+            <div class="cinema-list" id="cinemaListContainer"></div>
+        </div>
+    </div>
+
+    <div class="ticket-modal glass-panel-modal" id="ticketModal">
+        <div class="cinema-header-nav">
+            <i class="fa-solid fa-arrow-left cinema-close" id="closeTicket"></i>
+            <div style="margin-left:15px;">
+                <span style="font-size:11px; color:#aaa; display:block;">Home / <strong id="ticketBreadcrumb" style="color:#fff;">Tickets</strong></span>
+                <strong id="ticketModalTitle" style="font-size:18px;">Select a Movie</strong>
+            </div>
+        </div>
+        
+        <div class="ticket-content" id="ticketStep1">
+            <div class="ticket-movie-list" id="ticketMovieList"></div>
+        </div>
+
+        <div class="ticket-content hidden" id="ticketStep2">
+            <div class="tm-header-container" id="tmHeaderContainer">
+                <div class="tm-overlay-gradient"></div>
+                <div class="tm-content-flex">
+                    <img id="tmPoster" src="" alt="Poster" class="tm-poster-img">
+                    <div class="tm-details">
+                        <h2 id="tmTitle" class="tm-title-large">Movie Title</h2>
+                        <div class="tm-meta-row">
+                            <span id="tmRate" class="tag-box">R13+</span>
+                            <span id="tmDur" class="tag-box">2h 15m</span>
+                            <span id="tmGenre" class="tm-genre-text">Genre</span>
+                        </div>
+                        <p id="tmSynopsis" class="tm-synopsis-text">Synopsis goes here...</p>
+                    </div>
+                    <div class="tm-action-area">
+                         <button class="tm-trailer-btn" id="tmTrailerBtn"><i class="fa-solid fa-play"></i> Watch Trailer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <span class="filter-label">Filter:</span>
+                <button class="filter-btn active" data-filter="all">ALL</button>
+                <button class="filter-btn" data-filter="2D">2D</button>
+                <button class="filter-btn" data-filter="3D">3D</button>
+                <button class="filter-btn" data-filter="IMAX">IMAX</button>
+                <button class="filter-btn" data-filter="4DX">4DX</button>
+            </div>
+
+            <div class="cinema-list" id="ticketCinemaList"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
