@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     const movieTimeData = ["12:00", "13:30", "14:40", "16:15", "19:00", "21:30"];
 
-    // === DATA FILM HERO (With Embed Links) ===
+    // === DATA FILM HERO ===
     const heroMovies = [
         { 
             title: "AVATAR: FIRE AND ASH", 
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
             synopsis: "Jake and Neytiri's family grapples with grief, encountering a new, aggressive Na'vi tribe, the Ash People, who are led by the fiery Varang, as the conflict on Pandora escalates.",
             img: "avatarheader.jpg",
             poster: "avatar.jpeg",
-            trailer: "https://geo.dailymotion.com/player.html?video=x9ynuco" // Dummy URL
+            trailer: "https://geo.dailymotion.com/player.html?video=x9ynuco"
         },
         { 
             title: "FIVE NIGHTS AT FREDDY'S 2", 
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             synopsis: "One year after the supernatural nightmare at Freddy Fazbear's Pizza, Abby runs away to reconnect with her animatronic friends, uncovering dark secrets about the true origins of Freddy's.",
             img: "fnaf2header.png",
             poster: "fnaf2.jpg",
-            trailer: "https://geo.dailymotion.com/player.html?video=x9ynuw8" // Dummy URL
+            trailer: "https://geo.dailymotion.com/player.html?video=x9ynuw8"
         },
         { 
             title: "AGAK LAEN: MENYALA PANTIKU!", 
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
             synopsis: "After repeatedly failing to carry out their missions, Detectives Bene, Boris, Jegel, and Oki are given one last chance to infiltrate a nursing home.",
             img: "agaklaenheader.jpg",
             poster: "agaklaen.jpg",
-            trailer: "https://geo.dailymotion.com/player.html?video=x9ynv2a" // Placeholder
+            trailer: "https://geo.dailymotion.com/player.html?video=x9ynv2a"
         },
         { 
             title: "ZOOTOPIA 2", 
@@ -140,8 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     ];
 
-    // === DATA FILM LENGKAP (Merged for Ticket Modal) ===
-    // Menggunakan data HeroMovies sebagai referensi utama agar sinkron
+    // === DATA FILM LENGKAP ===
     const ticketMovies = heroMovies.map(m => ({
         ...m,
         isGreen: m.rate.includes("SU"),
@@ -216,14 +215,13 @@ document.addEventListener('DOMContentLoaded', function() {
             else if(movie.rate.includes('D17')) rateEl.classList.add('danger');
             else rateEl.classList.add('warning');
 
-            // 1. FREEZE SLIDER ON CLICK
             buyBtn.onclick = () => {
-                stopHeroInterval(); // Stop slider
+                stopHeroInterval(); 
                 window.openTicketModalWithMovie(movie.title);
             };
             
             trailerBtn.onclick = () => {
-                stopHeroInterval(); // Stop slider
+                stopHeroInterval(); 
                 openTrailerModal(movie.trailer);
             };
 
@@ -273,20 +271,19 @@ document.addEventListener('DOMContentLoaded', function() {
             alert("Trailer belum tersedia untuk film ini.");
             return;
         }
-        // Pastikan URL embed youtube benar (autoplay on)
         const finalUrl = embedUrl.includes("?") ? `${embedUrl}&autoplay=1` : `${embedUrl}?autoplay=1`;
         
         trailerIframe.src = finalUrl;
         trailerModal.classList.add('show');
         document.getElementById('modalOverlay').classList.add('show');
-        document.body.classList.add('no-scroll'); // FREEZE SCROLL
+        document.body.classList.add('no-scroll'); 
     };
 
     closeTrailer.addEventListener('click', () => {
         trailerModal.classList.remove('show');
         document.getElementById('modalOverlay').classList.remove('show');
         document.body.classList.remove('no-scroll');
-        trailerIframe.src = ""; // Stop Video
+        trailerIframe.src = ""; 
     });
 
     // === LOGIC PROMO SLIDER ===
@@ -372,8 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     initCarousel();
 
-    // === CINEMA MODAL LOGIC (Render, Search & Redirect) ===
-    
+    // === CINEMA MODAL LOGIC ===
     function renderCinemaList(filterText = "") {
         const container = document.getElementById('cinemaListContainer');
         const title = document.getElementById('cinemaModalTitle');
@@ -408,11 +404,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <i class="fa-solid fa-chevron-right right-arrow"></i>`;
             
-            // 3. CINEMA MODAL REDIRECT TO TICKET MODAL
             item.onclick = () => {
                 document.getElementById('cinemaModal').classList.remove('show');
-                // Open Ticket Modal (Step 1 - Select Movie first)
-                // Or if we had a movie selected, go to Step 2. Assuming fresh start:
                 renderTicketStep1();
                 document.getElementById('ticketStep1').classList.remove('hidden');
                 document.getElementById('ticketStep2').classList.add('hidden');
@@ -451,7 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('ticketStep2').classList.remove('hidden');
         document.getElementById('ticketBreadcrumb').innerText = movie.title;
         
-        // 4. POPULATE NEW HEADER (STEP 2)
         document.getElementById('tmHeaderContainer').style.backgroundImage = `url('${movie.img}')`;
         document.getElementById('tmPoster').src = movie.poster;
         document.getElementById('tmTitle').innerText = movie.title;
@@ -460,44 +452,59 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('tmGenre').innerText = movie.genre || "";
         document.getElementById('tmSynopsis').innerText = movie.synopsis || "No synopsis available.";
         
-        // Setup Rate Color
         const tmRate = document.getElementById('tmRate');
         tmRate.className = 'tag-box';
         if(movie.rate.includes('SU')) tmRate.classList.add('success');
         else if(movie.rate.includes('D17')) tmRate.classList.add('danger');
         else tmRate.classList.add('warning');
 
-        // Setup Trailer Button inside Ticket Modal
         document.getElementById('tmTrailerBtn').onclick = () => openTrailerModal(movie.trailer);
 
-        // Render Cinemas
         renderTicketCinemaList();
     }
 
-    // 5. FILTER LOGIC & RENDER CINEMAS
+    // 5. FILTER LOGIC & RENDER CINEMAS (UPDATED FOR COMBINATIONS)
     function renderTicketCinemaList() {
         const container = document.getElementById('ticketCinemaList'); container.innerHTML = '';
         const list = cinemaDatabase[currentCity] || [];
         
-        // Filter Logic
+        // --- NEW FILTER LOGIC START ---
         const filteredList = list.filter(c => {
             if (activeFilter === 'all') return true;
-            return c.types.includes(activeFilter);
+            
+            // Cek apakah filter mengandung koma (kombinasi)
+            if (activeFilter.includes(',')) {
+                const requiredTypes = activeFilter.split(','); // Contoh: ["XLV", "IMAX"]
+                // Cek apakah cinema punya SEMUA tipe yang diminta
+                return requiredTypes.every(reqType => c.types.includes(reqType));
+            } else {
+                // Single filter
+                return c.types.includes(activeFilter);
+            }
         });
+        // --- NEW FILTER LOGIC END ---
 
         if(filteredList.length === 0) {
-            container.innerHTML = `<div style="padding:40px; text-align:center; color:#666;">No cinemas available for <strong>${activeFilter}</strong> format.</div>`;
+            let msg = activeFilter.includes(',') ? activeFilter.replace(',', ' & ') : activeFilter;
+            container.innerHTML = `<div style="padding:40px; text-align:center; color:#666;">No cinemas available for <strong>${msg}</strong> format in ${currentCity}.</div>`;
             return;
         }
 
         filteredList.forEach(c => {
             const wrapper = document.createElement('div'); wrapper.className = 'accordion-cinema';
+            
+            // Tampilan label showtime menyesuaikan filter
+            let showtimeLabel = "REGULAR";
+            if(activeFilter !== 'all') {
+                showtimeLabel = activeFilter.includes(',') ? activeFilter.replace(',', ' & ') : activeFilter;
+            }
+
             wrapper.innerHTML = `
                 <div class="accordion-header" onclick="this.parentElement.classList.toggle('open')">
                      <div class="left-info"><span class="cinema-name" style="font-size:14px;">${c.name}</span><span class="cinema-dist">${c.dist}</span></div>
                     <i class="fa-solid fa-chevron-right right-arrow"></i>
                 </div>
-                <div class="time-grid-container"><span style="font-size:12px; color:#aaa; margin-top:10px; display:block;">SHOWTIMES (${activeFilter === 'all' ? 'REGULAR' : activeFilter})</span>
+                <div class="time-grid-container"><span style="font-size:12px; color:#aaa; margin-top:10px; display:block;">SHOWTIMES (${showtimeLabel})</span>
                     <div class="time-grid">${movieTimeData.map(t => `<button class="time-btn">${t}</button>`).join('')}</div>
                 </div>`;
             container.appendChild(wrapper);
@@ -519,7 +526,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (movie) {
             renderTicketStep1(); 
-            document.getElementById('menuTicket').click(); // Opens modal
+            document.getElementById('menuTicket').click(); 
             selectMovieForTicket(movie);
         } else {
             renderTicketStep1(); 
@@ -538,22 +545,56 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('registerPhone').addEventListener('input', (e) => enforceNumberOnly(e, 16));
     document.getElementById('loginPhone').addEventListener('input', (e) => enforceNumberOnly(e, 16));
     document.getElementById('loginPinInput').addEventListener('input', (e) => enforceNumberOnly(e, 6));
+    
+    // NEW: Register PIN input logic
+    document.getElementById('registerPin').addEventListener('input', (e) => enforceNumberOnly(e, 6));
+
+    // NEW: DOB Formatting Logic (DD/MM/YYYY)
+    const dobInput = document.getElementById('registerDob');
+    dobInput.addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, ''); // Hapus non-angka
+        if (v.length > 8) v = v.slice(0, 8); // Max 8 digit (ddmmyyyy)
+        
+        // Add Slashes
+        if (v.length > 4) {
+            e.target.value = `${v.slice(0,2)}/${v.slice(2,4)}/${v.slice(4)}`;
+        } else if (v.length > 2) {
+            e.target.value = `${v.slice(0,2)}/${v.slice(2)}`;
+        } else {
+            e.target.value = v;
+        }
+    });
 
     document.getElementById('btnRegisterAction').addEventListener('click', function() {
         const email = document.getElementById('registerEmail').value;
         const phone = document.getElementById('registerPhone').value;
         const dob = document.getElementById('registerDob').value;
+        const pin = document.getElementById('registerPin').value; // New PIN check
+
+        if(!email.endsWith('@gmail.com')) { alert("Email Not Valid."); return; }
+        if(phone.length < 10) { alert("Phone Number Not Valid."); return; }
+        if(pin.length !== 6) { alert("PIN must be 6 digits."); return; }
+
+        // === VALIDASI TANGGAL LAHIR KETAT ===
+        if(!dob || dob.length !== 10) { alert("Date of Birth Incomplete (DD/MM/YYYY)."); return; }
         
-        if(!email.endsWith('@gmail.com')) { alert("Email harus menggunakan @gmail.com!"); return; }
-        if(phone.length < 10) { alert("Nomor telepon tidak valid."); return; }
-        if(!dob) { alert("Mohon isi tanggal lahir."); return; }
-        alert("Pendaftaran berhasil dilanjutkan!");
+        const parts = dob.split('/');
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+
+        if(day < 1 || day > 31) { alert("Invalid Day (1-31)."); return; }
+        if(month < 1 || month > 12) { alert("Invalid Month (1-12)."); return; }
+        if(year > 2026) { alert("Year cannot be in the future (Max 2026)."); return; }
+        if(year < 1900) { alert("Year Invalid."); return; }
+
+        alert("Register Succesfully, you can continue!");
     });
 
     document.getElementById('btnLoginAction').addEventListener('click', function() {
         const pin = document.getElementById('loginPinInput').value;
-        if(pin.length !== 6) { alert("PIN harus 6 digit angka."); return; }
-        alert("Login berhasil!");
+        if(pin.length !== 6) { alert("PIN Must 6 number."); return; }
+        alert("Login Success, Welcome Back!");
     });
 
     // === PROMO CODE LOGIC ===
@@ -584,7 +625,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === MODAL HANDLERS ===
     function closeModal() {
-        // Stop trailer if open
         const iframe = document.getElementById('trailerIframe');
         if(iframe) iframe.src = "";
 
@@ -592,7 +632,6 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.classList.remove('show'); 
         document.body.classList.remove('no-scroll');
         
-        // Resume Hero slider if it was paused
         if(heroIsPaused) resetHeroInterval();
     }
     if(overlay) overlay.addEventListener('click', closeModal);
@@ -603,7 +642,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('ticketStep2').classList.add('hidden');
             document.getElementById('ticketStep1').classList.remove('hidden');
             document.getElementById('ticketBreadcrumb').innerText = "Tickets";
-            // Reset filter
+            
             activeFilter = "all";
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
@@ -637,7 +676,6 @@ document.addEventListener('DOMContentLoaded', function() {
         closeModal(); 
     };
     
-    // Auth Helpers
     document.getElementById('linkToRegister').addEventListener('click', (e) => { e.preventDefault(); document.getElementById('loginModal').classList.remove('show'); setTimeout(() => document.getElementById('registerModal').classList.add('show'), 100); });
     document.getElementById('toggleLoginPin').addEventListener('click', function() {
         const input = document.getElementById('loginPinInput');
@@ -645,7 +683,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     document.getElementById('locationBtn').addEventListener('click', () => { document.getElementById('locationModal').classList.add('show'); overlay.classList.add('show'); document.body.classList.add('no-scroll'); });
     
-    // === SCROLL NAVBAR LOGIC ===
     window.addEventListener('scroll', () => { 
         const nav = document.getElementById('navbar'); 
         if(window.scrollY > 50) nav.classList.add('scrolled'); 
