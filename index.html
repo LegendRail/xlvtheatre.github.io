@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CinemaXLV - #LebihASIK di XLV</title>
+    <title>XLV Cinemas - #LebihASIK di XLV</title>
+	<link rel="icon" type="image/x-icon" href="xlvicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,10 +14,17 @@
 <body class="no-scroll"> 
     
     <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-content">
-            <img src="XLV2.png" alt="XLV Loading" class="loading-logo">
-            <div class="loading-bar-container">
-                <div class="loading-bar"></div>
+        <div class="loading-bg-full"></div>
+        
+        <div class="loading-bg-overlay"></div>
+
+        <div class="loading-content-v2">
+            <img src="XLV2.png" alt="XLV Logo" class="loading-main-logo">
+            
+            <div class="loading-dots-container">
+                <div class="l-dot"></div>
+                <div class="l-dot"></div>
+                <div class="l-dot"></div>
             </div>
         </div>
     </div>
@@ -123,8 +131,7 @@
     <section class="content-section" style="overflow: hidden;">
         <div class="section-header">
             <h3>Coming soon to XLV</h3>
-            <a href="#" class="see-all">See all <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
+            </div>
         <div class="carousel-3d-wrapper">
             <button class="nav-btn prev-btn" id="prevSlideBtnComing"><i class="fa-solid fa-chevron-left"></i></button>
             <div class="carousel-container" id="carouselTrackComing"></div>
@@ -236,6 +243,7 @@
     <div class="modal-center glass-panel-modal auth-modal" id="registerModal">
          <div class="auth-header-left">
              <i class="fa-solid fa-arrow-left back-icon" id="closeRegister"></i>
+
              <h3>Make your n.tix</h3>
          </div>
         <div class="auth-form">
@@ -296,6 +304,16 @@
         </div>
         
         <div class="ticket-content" id="ticketStep1">
+            <div class="ticket-filter-header">
+                <div class="ticket-search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="movieSearchInput" placeholder="Search movie..." class="ticket-search-input">
+                </div>
+                <div class="ticket-type-tabs">
+                    <button class="tab-btn active" id="tabNowPlaying">Now Playing</button>
+                    <button class="tab-btn" id="tabAdvance">Advance Sales</button>
+                </div>
+            </div>
             <div class="ticket-movie-list" id="ticketMovieList"></div>
         </div>
 
@@ -309,6 +327,7 @@
                         <div class="tm-meta-row">
                             <span id="tmRate" class="tag-box">R13+</span>
                             <span id="tmDur" class="tag-box">2h 15m</span>
+                            <span id="tmRelease" class="tag-box release hidden">Release: -</span>
                             <span id="tmGenre" class="tm-genre-text">Genre</span>
                         </div>
                         <p id="tmSynopsis" class="tm-synopsis-text">Synopsis goes here...</p>
@@ -319,12 +338,65 @@
                 </div>
             </div>
 
+            <div class="date-selector-bar">
+                <div class="date-scroll-container" id="dateSelectionContainer"></div>
+            </div>
+
             <div class="filter-bar" id="ticketFilterBar" style="flex-wrap: wrap; height: auto;"></div>
 
             <div class="cinema-list" id="ticketCinemaList"></div>
             
             <div id="comingSoonMessage" class="hidden" style="padding: 50px; text-align: center; color: #888; font-style: italic;">
                 Coming Soon to XLV. Stay Tuned!
+            </div>
+        </div>
+
+        <div class="ticket-content hidden" id="ticketStep3" style="display: flex; flex-direction: column; height: 100%; overflow: hidden;">
+            <div class="seat-info-bar">
+                <div class="seat-info-left">
+                    <div class="seat-movie-title" id="seatMovieTitle">MOVIE TITLE</div>
+                    <div class="seat-cinema-details" style="font-size: 13px; color: var(--primary); margin-top: 4px; font-weight: 700;">
+                        <i class="fa-solid fa-location-dot" style="margin-right: 5px;"></i>
+                        <span id="seatCinemaName">CINEMA NAME</span>
+                        <span style="margin: 0 8px; color: #555;">|</span>
+                        <i class="fa-regular fa-clock" style="margin-right: 5px;"></i>
+                        <span id="seatShowtime">00:00</span>
+                    </div>
+                </div>
+                <div class="seat-meta-info">
+                    <span id="seatMovieRate" class="tag-box">R13+</span>
+                    <span id="seatMovieDur" class="tag-box">0h 00m</span>
+                    <span id="seatMovieFormat" class="tag-box format-tag">2D</span>
+                </div>
+            </div>
+
+            <div class="seat-map-scroll-area">
+                <div class="screen-container">
+                    <div class="screen-curve"></div>
+                    <div class="screen-glow"></div>
+                    <div class="screen-logo-container">
+                         <img src="XLV2.png" alt="Screen Logo" id="screenLogoImg" class="screen-logo">
+                         <span class="screen-text">SCREEN</span>
+                    </div>
+                </div>
+
+                <div class="seat-grid-container">
+                    <div class="seat-grid" id="seatGrid">
+                        </div>
+                </div>
+
+                <div class="seat-legend">
+                    <div class="legend-item"><div class="seat-sample available"></div><span>Available</span></div>
+                    <div class="legend-item"><div class="seat-sample selected"></div><span>Selected</span></div>
+                </div>
+            </div>
+
+            <div class="seat-booking-footer">
+                <div class="booking-summary">
+                    <span class="seat-count-info"><span id="totalSeats">0</span> Seats Selected</span>
+                    <span class="total-price-info" id="totalPrice">Rp 0</span>
+                </div>
+                <button class="btn-checkout" id="btnCheckout">Check Out</button>
             </div>
         </div>
     </div>

@@ -1,18 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
     
-    // === 1. LOADING SCREEN LOGIC ===
+    // === 1. LOADING SCREEN LOGIC (WAIT FOR WINDOW LOAD) ===
     window.addEventListener('load', function() {
         const loadingOverlay = document.getElementById('loadingOverlay');
+        
+        // Memastikan animasi loading terlihat minimal 1.5 detik agar user bisa menikmati animasi "Fade In Image -> Logo -> Dots"
         setTimeout(() => {
             loadingOverlay.classList.add('hidden');
             document.body.classList.remove('no-scroll');
-        }, 1000);
+        }, 1500); 
     });
 
     // === GLOBAL STATE ===
     let currentCity = "BANDUNG"; 
     let selectedMovieData = null;
     let activeFilter = "2D"; // Default filter placeholder
+    let ticketSearchQuery = "";
+    let ticketTab = "now"; // 'now' or 'adv'
+    let selectedDate = new Date(); // Default today
+
+    // STATE KURSI
+    let selectedSeats = new Set();
+    let currentPricePerSeat = 0;
 
     // === DATA CINEMA ===
     const cinemaDatabase = {
@@ -44,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
             { name: "RAMAYANA CIREBON XLV", dist: "8.1 km", types: ["XLV", "2D", "3D"] }
         ]
     };
-    const movieTimeData = ["12:00", "13:30", "14:40", "16:15", "19:00", "21:30"];
 
     // === DATA FILM HERO & NOW PLAYING ===
     const heroMovies = [
@@ -63,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             rate: "R13+", dur: "1h 44m", 
             genre: "Horror / Mystery / Thriller",
             synopsis: "One year after the supernatural nightmare at Freddy Fazbear's Pizza, Abby runs away to reconnect with her animatronic friends.",
-            img: "fnaf2header.png",
+            img: "fnaf2header.jpg",
             poster: "fnaf2.jpg",
             trailer: "https://geo.dailymotion.com/player.html?video=x9ynuw8",
             formats: ["2D"]
@@ -129,14 +137,14 @@ document.addEventListener('DOMContentLoaded', function() {
             formats: ["2D"]
         },
         { 
-            title: "RETURN TO SILENT HILL", 
-            rate: "D17+", dur: "1h 46m", 
-            genre: "Horror / Mystery",
-            synopsis: "When a man receives a mysterious letter from his lost love, he is drawn to Silent Hill.",
-            img: "silenthillheader.jpg",
-            poster: "silenthill.jpg",
-            trailer: "https://geo.dailymotion.com/player.html?video=x9yny68",
-            formats: ["2D"]
+            title: "JUJUTSU KAISEN: EXECUTION", 
+            rate: "R13+", dur: "1h 27m", 
+            genre: "Anime / Fantasy / Action",
+            synopsis: "A veil abruptly descends over the busy Shibuya area amid the bustling Halloween crowds, trapping countless civilians inside. In the aftermath, ten colonies across Japan are transformed into dens of curses.",
+            img: "jujutsukaisenheader.jpg",
+            poster: "jujutsukaisen.jpg",
+            trailer: "https://geo.dailymotion.com/player.html?video=x9yxbsc",
+            formats: ["2D", "IMAX", "4DX"]
         },
         { 
             title: "CORALINE (3D)", 
@@ -165,32 +173,32 @@ document.addEventListener('DOMContentLoaded', function() {
         { 
             title: "5 CENTIMETERS PER SECOND (ANIMATION)", rate: "R13+", dur: "1h 03m", genre: "Anime / Drama / Slice of life / Romance",
             synopsis: "Told in three interconnected segments, Takaki tells the story of his life as cruel winters, cold technology, and finally, adult obligations and responsibility converge to test the delicate petals of love.",
-            img: "5cpsheader.png", poster: "5cps.jpg", trailer: "", formats: ["2D"]
+            img: "5cpsheader.png", poster: "5cps.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9ysyqw", formats: ["2D"]
         },
         { 
-            title: "CAPTAIN AMERICA: BRAVE NEW WORLD", rate: "R13+", dur: "2h 10m", genre: "Action / Adventure",
-            synopsis: "Sam Wilson, who has officially taken up the mantle of Captain America, finds himself in the middle of an international incident.",
-            img: "capamericaheader.jpg", poster: "capamerica.jpg", trailer: "", formats: ["2D", "IMAX", "4DX", "Premiere"]
+            title: "MERAH PUTIH: ONE FOR ALL", rate: "SU", dur: "1h 10m", genre: "Animation / Adventure / Family",
+            synopsis: "Eight diverse kids form Tim Merah Putih to guard Indonesia's flag for Independence Day. When it goes missing, they unite on a mission to retrieve it, learning teamwork, patriotism, and the power of unity in diversity.",
+            img: "mpheader.jpg", poster: "mp.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9ysyvw", formats: ["2D"]
         },
         { 
-            title: "BALLERINA", rate: "D17+", dur: "2h 05m", genre: "Action / Thriller",
-            synopsis: "Taking place between the events of John Wick: Chapter 3 and Chapter 4, Eve Macarro begins her training in the assassin traditions of the Ruska Roma.",
-            img: "ballerinaheader.jpg", poster: "ballerina.jpg", trailer: "", formats: ["2D", "Premiere"]
+            title: "CROWS ZERO", rate: "D17+", dur: "2h 10m", genre: "Japanese / Action / Crime",
+            synopsis: "A transfer student attempts to take over the most violent high school in the country, whose students form factions and battle each other for power.",
+            img: "crowsheader.jpg", poster: "crows.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yszxi", formats: ["2D"]
         }
     ];
 
     // === DATA COMING SOON (10 MOVIES) ===
     const comingSoonMovies = [
-        { title: "SUPERMAN", rate: "R13+", dur: "TBC", genre: "Action / Sci-Fi", poster: "superman.jpg", img: "supermanheader.jpg", trailer: "", synopsis: "Clark Kent reconciles his Kryptonian heritage with his human adoptive family." },
-        { title: "THE FANTASTIC FOUR", rate: "R13+", dur: "TBC", genre: "Action / Adventure", poster: "f4.jpg", img: "f4header.jpg", trailer: "", synopsis: "One of Marvel's most iconic families makes it back to the big screen." },
-        { title: "THE BATMAN PART II", rate: "D17+", dur: "TBC", genre: "Action / Crime", poster: "batman2.jpg", img: "batman2header.jpg", trailer: "", synopsis: "Bruce Wayne continues his fight against corruption in Gotham City." },
-        { title: "JURASSIC WORLD: REBIRTH", rate: "R13+", dur: "TBC", genre: "Adventure / Sci-Fi", poster: "jurassic.jpg", img: "jurassicheader.jpg", trailer: "", synopsis: "A new era of Jurassic mayhem begins." },
-        { title: "AVENGERS: DOOMSDAY", rate: "R13+", dur: "TBC", genre: "Action / Sci-Fi", poster: "avengersdoom.jpg", img: "avengersdoomheader.jpg", trailer: "", synopsis: "Earth's mightiest heroes face their greatest threat yet: Doctor Doom." },
-        { title: "SHREK 5", rate: "SU", dur: "TBC", genre: "Animation / Comedy", poster: "shrek5.jpg", img: "shrek5header.jpg", trailer: "", synopsis: "Shrek returns for another swamp-tastic adventure." },
-        { title: "TOY STORY 5", rate: "SU", dur: "TBC", genre: "Animation / Adventure", poster: "toystory5.jpg", img: "toystory5header.jpg", trailer: "", synopsis: "Woody and Buzz return." },
-        { title: "FROZEN III", rate: "SU", dur: "TBC", genre: "Animation / Musical", poster: "frozen3.jpg", img: "frozen3header.jpg", trailer: "", synopsis: "Elsa and Anna embark on a new journey." },
-        { title: "STAR WARS: NEW JEDI ORDER", rate: "R13+", dur: "TBC", genre: "Sci-Fi / Adventure", poster: "starwars.jpg", img: "starwarsheader.jpg", trailer: "", synopsis: "Rey rebuilds the Jedi Order." },
-        { title: "MOANA (LIVE ACTION)", rate: "SU", dur: "TBC", genre: "Adventure / Musical", poster: "moana.jpg", img: "moanaheader.jpg", trailer: "", synopsis: "The live-action adaptation of the Disney classic." }
+        { title: "THE ODYSSEY", rate: "D17+", dur: "2h 40m", genre: "Action / Adventure / Fantasy", poster: "odyssey.jpg", img: "odysseyheader.jpg", trailer: "", synopsis: "After the Trojan War, Odysseus faces a dangerous voyage back to Ithaca, meeting creatures like the Cyclops Polyphemus, Sirens, and Circe along the way.", releaseDate: "17 July 2026" },
+        { title: "SPIDER-MAN: BRAND NEW DAY", rate: "R13+", dur: "TBC", genre: "Action / Sci-Fi / Superhero", poster: "spidermanbnd.jpg", img: "spidermanbndheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx48y", synopsis: "Peter Parker tries to focus on college and leave Spider-Man behind. But when a new threat endangers his friends, he must break his promise and suit up again, teaming with an unexpected ally to protect those he loves.", releaseDate: "31 July 2026" },
+        { title: "GOAT", rate: "SU", dur: "1h 40m", genre: "Animation / Family / Sport", poster: "goat.jpg", img: "goatheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx4l0", synopsis: "A small goat with big dreams gets a once-in-a-lifetime shot to join the pros and play roarball, a high-intensity, co-ed, full-contact sport dominated by the fastest, fiercest animals in the world.", releaseDate: "13 Feb 2026" },
+        { title: "MOANA", rate: "SU", dur: "TBC", genre: "Adventure / Family / Action", poster: "moana.jpg", img: "moanaheader.jpg", trailer: "", synopsis: "Live-action adaptation of the 2016 Disney animated film Moana.", releaseDate: "10 July 2026" },
+        { title: "AVENGERS: DOOMSDAY", rate: "R13+", dur: "3h 45m", genre: "Action / Sci-Fi / Superhero", poster: "doomsday.jpg", img: "doomsdayheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx3o2", synopsis: "Plot under wraps.", releaseDate: "18 December 2026" },
+        { title: "STAR WARS: THE MANDALORIAN AND GROGU", rate: "R13+", dur: "TBC", genre: "Action / Sci-Fi / Adventure", poster: "themandalorian.jpg", img: "themandalorianheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx5is", synopsis: "Once a lone bounty hunter, Mandalorian Din Djarin and his apprentice Grogu embark on an exciting new Star Wars adventure.", releaseDate: "22 May 2026" },
+        { title: "MASTERS OF THE UNIVERSE", rate: "R13+", dur: "TBC", genre: "Adventure / Sci-Fi / Superhero", poster: "mou.jpg", img: "mouheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx8tc", synopsis: "A young man on Earth discovers a fabulous secret legacy as the prince of an alien planet, and must recover a magic sword and return home to protect his kingdom.", releaseDate: "05 Jun 2026" },
+        { title: "THE SUPER MARIO GALAXY MOVIE", rate: "SU", dur: "TBC", genre: "Animation / Fantasy / Adventure", poster: "thesupermariogalaxy.jpg", img: "thesupermariogalaxyheader.jpg", trailer: "", synopsis: "Mario ventures into space, exploring cosmic worlds and tackling galactic challenges far from the familiar Mushroom Kingdom.", releaseDate: "01 April 2026" },
+        { title: "HOPPERS", rate: "SU", dur: "1h 45m", genre: "Animation / Comedy / Family", poster: "hoppers.jpg", img: "hoppersheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yxai0", synopsis: "A 19-year-old animal lover uses technology that places her consciousness into a robotic beaver to uncover mysteries within the animal world beyond her imagination.", releaseDate: "06 March 2026" },
+        { title: "TOY STORY 5", rate: "SU", dur: "TBC", genre: "Animation / Family / Adventure", poster: "toystory5.jpg", img: "toystory5header.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yxahy", synopsis: "Woody, Buzz, Jessie and the rest of the gang's jobs are challenged when they're introduced to electronics, a new threat to playtime.", releaseDate: "19 June 2026" }
     ];
 
     // Helper to add formatting flags
@@ -321,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.openTrailerModal = function(embedUrl) {
         if(!embedUrl) {
-            alert("Trailer belum tersedia untuk film ini.");
+            alert("Trailer still not unavailable.");
             return;
         }
         const finalUrl = embedUrl.includes("?") ? `${embedUrl}&autoplay=1` : `${embedUrl}?autoplay=1`;
@@ -372,7 +380,7 @@ document.addEventListener('DOMContentLoaded', function() {
             this.prevBtn = document.getElementById(prevBtnId);
             this.nextBtn = document.getElementById(nextBtnId);
             this.movies = moviesData;
-            this.clickAction = clickAction; // Store custom click callback
+            this.clickAction = clickAction; 
             this.index = 0;
             this.init();
         }
@@ -385,18 +393,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 el.className = 'carousel-item';
                 el.innerHTML = `<img src="${m.poster}" class="poster-img" alt="${m.title}">`;
                 
-                // CLICK EVENT
                 el.onclick = () => {
                     if(i === this.index) {
-                        // If card is active (center), trigger action
                         if(this.clickAction) {
                             this.clickAction(m);
                         } else {
-                            // Fallback default
                             window.openTicketModalWithMovie(m.title);
                         }
                     } else {
-                        // If card is side, scroll to it
                         this.index = i;
                         this.update();
                     }
@@ -445,33 +449,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // === INITIALIZE CAROUSELS ===
-
-    // 1. Now Playing Carousel -> Open Ticket Modal
-    new Carousel3D(
-        'carouselTrack', 
-        'prevSlideBtn', 
-        'nextSlideBtn', 
-        ticketMovies, 
-        (m) => window.openTicketModalWithMovie(m.title)
-    );
-    
-    // 2. Advance Ticket Carousel -> Open Ticket Modal
-    new Carousel3D(
-        'carouselTrackAdv', 
-        'prevSlideBtnAdv', 
-        'nextSlideBtnAdv', 
-        ticketAdvanceMovies, 
-        (m) => window.openTicketModalWithMovie(m.title)
-    );
-
-    // 3. Coming Soon Carousel -> Open Coming Soon Modal
-    new Carousel3D(
-        'carouselTrackComing', 
-        'prevSlideBtnComing', 
-        'nextSlideBtnComing', 
-        ticketComingSoonMovies,
-        (m) => window.openComingSoonModal(m)
-    );
+    new Carousel3D('carouselTrack', 'prevSlideBtn', 'nextSlideBtn', ticketMovies, (m) => window.openTicketModalWithMovie(m.title));
+    new Carousel3D('carouselTrackAdv', 'prevSlideBtnAdv', 'nextSlideBtnAdv', ticketAdvanceMovies, (m) => window.openTicketModalWithMovie(m.title));
+    new Carousel3D('carouselTrackComing', 'prevSlideBtnComing', 'nextSlideBtnComing', ticketComingSoonMovies, (m) => window.openComingSoonModal(m));
 
     // === CINEMA MODAL LOGIC ===
     function renderCinemaList(filterText = "") {
@@ -528,14 +508,49 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // === TICKET MODAL LOGIC ===
+    // === TICKET SEARCH & TAB LOGIC ===
+    const movieSearchInput = document.getElementById('movieSearchInput');
+    const tabNowPlaying = document.getElementById('tabNowPlaying');
+    const tabAdvance = document.getElementById('tabAdvance');
+
+    if(movieSearchInput) {
+        movieSearchInput.addEventListener('input', (e) => {
+            ticketSearchQuery = e.target.value;
+            renderTicketStep1();
+        });
+    }
+
+    if(tabNowPlaying && tabAdvance) {
+        tabNowPlaying.addEventListener('click', () => {
+            ticketTab = 'now';
+            tabNowPlaying.classList.add('active');
+            tabAdvance.classList.remove('active');
+            renderTicketStep1();
+        });
+        tabAdvance.addEventListener('click', () => {
+            ticketTab = 'adv';
+            tabAdvance.classList.add('active');
+            tabNowPlaying.classList.remove('active');
+            renderTicketStep1();
+        });
+    }
+
     function renderTicketStep1() {
         const container = document.getElementById('ticketMovieList'); container.innerHTML = '';
         
-        // Gabungkan Now Playing dan Advance agar bisa dipilih
-        const allTicketMovies = [...ticketMovies, ...ticketAdvanceMovies];
+        let moviesToRender = [];
+        if(ticketTab === 'now') moviesToRender = ticketMovies;
+        else moviesToRender = ticketAdvanceMovies;
 
-        allTicketMovies.forEach(m => {
+        // Filter by search query
+        const filtered = moviesToRender.filter(m => m.title.toLowerCase().includes(ticketSearchQuery.toLowerCase()));
+
+        if(filtered.length === 0) {
+            container.innerHTML = `<div style="padding:30px; text-align:center; color:#666;">No movies found.</div>`;
+            return;
+        }
+
+        filtered.forEach(m => {
             const el = document.createElement('div'); el.className = 'movie-select-item';
             let tagClass = m.isGreen ? 'su' : (m.isRed ? 'dang' : 'warn');
             el.innerHTML = `
@@ -546,34 +561,100 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // === GENERATE DYNAMIC DATES (7 DAYS) ===
+    function generateDates() {
+        const container = document.getElementById('dateSelectionContainer');
+        if(!container) return;
+        container.innerHTML = '';
+
+        const today = new Date();
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        for(let i=0; i<7; i++) {
+            const d = new Date(today);
+            d.setDate(today.getDate() + i);
+            
+            const dayName = i === 0 ? "TODAY" : days[d.getDay()];
+            const dateNum = d.getDate();
+            const monthShort = d.toLocaleString('default', { month: 'short' });
+
+            const btn = document.createElement('div');
+            btn.className = 'date-btn';
+            if(i === 0) btn.classList.add('active');
+
+            btn.innerHTML = `<span class="d-day">${dayName}</span><span class="d-num">${dateNum} ${monthShort}</span>`;
+            
+            btn.onclick = function() {
+                document.querySelectorAll('.date-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedDate = d;
+                renderTicketCinemaList(); // Re-render schedules when date changes
+            };
+            
+            container.appendChild(btn);
+        }
+    }
+
+    // === GENERATE DYNAMIC SHOWTIMES ===
+    function generateShowtimes(movieDurationStr) {
+        let durationMinutes = 120; // Default fallback
+        if(movieDurationStr) {
+            const hMatch = movieDurationStr.match(/(\d+)h/);
+            const mMatch = movieDurationStr.match(/(\d+)m/);
+            let h = hMatch ? parseInt(hMatch[1]) : 0;
+            let m = mMatch ? parseInt(mMatch[1]) : 0;
+            if(h > 0 || m > 0) durationMinutes = (h * 60) + m;
+        }
+
+        let gap = Math.max(120, durationMinutes + 15); 
+        let startTime = 10 * 60; // 10:00 AM
+        const endTimeLimit = 22 * 60; // 10:00 PM
+
+        let times = [];
+        let currentTime = startTime;
+
+        while(currentTime <= endTimeLimit) {
+            let hh = Math.floor(currentTime / 60);
+            let mm = currentTime % 60;
+            let timeStr = `${hh.toString().padStart(2, '0')}:${mm.toString().padStart(2, '0')}`;
+            times.push(timeStr);
+            currentTime += gap;
+        }
+        return times;
+    }
+
     function selectMovieForTicket(movie) {
         selectedMovieData = movie;
         document.getElementById('ticketStep1').classList.add('hidden');
         document.getElementById('ticketStep2').classList.remove('hidden');
+        document.getElementById('ticketStep3').classList.add('hidden'); // Reset Step 3
         document.getElementById('ticketBreadcrumb').innerText = movie.title;
         
-        // Show Filter & Cinema List (Default Behavior)
         document.getElementById('ticketFilterBar').style.display = 'flex';
         document.getElementById('ticketCinemaList').style.display = 'block';
         document.getElementById('comingSoonMessage').classList.add('hidden');
 
         updateModalContent(movie);
+        generateDates(); 
 
-        // === GENERATE FILTER BUTTONS (NO "ALL" BUTTON) ===
+        // === FILTER BUTTONS ===
         const filterBar = document.getElementById('ticketFilterBar');
         filterBar.innerHTML = '<span class="filter-label">Filter:</span>'; 
         
         const formats = movie.formats || ["2D"];
-        
-        // SET DEFAULT ACTIVE FILTER TO FIRST AVAILABLE FORMAT
         activeFilter = formats[0]; 
 
         formats.forEach(f => {
             if(f !== 'XLV') { 
                 const btn = document.createElement('button');
                 btn.className = 'filter-btn';
-                if(f === activeFilter) btn.classList.add('active'); // Auto select first format
-                btn.innerText = f;
+                if(f === activeFilter) btn.classList.add('active');
+
+                if(f === 'IMAX') btn.innerHTML = `<img src="IMAXICONWHITE.png" alt="IMAX">`;
+                else if (f === '4DX') btn.innerHTML = `<img src="4dx.png" alt="4DX">`;
+                else if (f === 'Premiere') btn.innerHTML = `<img src="cinemapremiere.png" alt="Premiere">`;
+                else btn.innerText = f;
+                
                 btn.setAttribute('data-filter', f);
                 btn.onclick = function() {
                     setFilter(this, f);
@@ -587,14 +668,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === NEW FUNCTION: OPEN COMING SOON MODAL (INFO ONLY) ===
     window.openComingSoonModal = function(movie) {
-        document.getElementById('menuTicket').click(); // Open Modal Base
+        document.getElementById('menuTicket').click(); 
         document.getElementById('ticketStep1').classList.add('hidden');
         document.getElementById('ticketStep2').classList.remove('hidden');
+        document.getElementById('ticketStep3').classList.add('hidden');
         document.getElementById('ticketBreadcrumb').innerText = movie.title;
         
-        // Hide Filter & Cinema List, Show Message
         document.getElementById('ticketFilterBar').style.display = 'none';
         document.getElementById('ticketCinemaList').style.display = 'none';
+        document.getElementById('dateSelectionContainer').innerHTML = ''; // Clear dates
         document.getElementById('comingSoonMessage').classList.remove('hidden');
 
         updateModalContent(movie);
@@ -615,11 +697,21 @@ document.addEventListener('DOMContentLoaded', function() {
         else if(movie.rate.includes('D17')) tmRate.classList.add('danger');
         else tmRate.classList.add('warning');
 
+        const releaseEl = document.getElementById('tmRelease');
+        if (movie.releaseDate) {
+             releaseEl.innerText = "Release: " + movie.releaseDate;
+             releaseEl.classList.remove('hidden');
+        } else {
+             releaseEl.classList.add('hidden');
+        }
+
         document.getElementById('tmTrailerBtn').onclick = () => openTrailerModal(movie.trailer);
     }
 
     function setFilter(btn, filter) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        const allBtns = document.getElementById('ticketFilterBar').querySelectorAll('.filter-btn');
+        allBtns.forEach(b => b.classList.remove('active'));
+        
         btn.classList.add('active');
         activeFilter = filter;
         renderTicketCinemaList();
@@ -630,7 +722,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const list = cinemaDatabase[currentCity] || [];
         
         const filteredList = list.filter(c => {
-             // Single filter check (Since "All" is removed)
              return c.types.includes(activeFilter);
         });
 
@@ -638,6 +729,8 @@ document.addEventListener('DOMContentLoaded', function() {
             container.innerHTML = `<div style="padding:40px; text-align:center; color:#666;">No cinemas available for <strong>${activeFilter}</strong> format in ${currentCity} for this movie.</div>`;
             return;
         }
+
+        const dynamicTimes = generateShowtimes(selectedMovieData ? selectedMovieData.dur : "2h 00m");
 
         filteredList.forEach(c => {
             const wrapper = document.createElement('div'); wrapper.className = 'accordion-cinema';
@@ -648,19 +741,175 @@ document.addEventListener('DOMContentLoaded', function() {
                      <div class="left-info"><span class="cinema-name" style="font-size:14px;">${c.name}</span><span class="cinema-dist">${c.dist}</span></div>
                     <i class="fa-solid fa-chevron-right right-arrow"></i>
                 </div>
-                <div class="time-grid-container"><span style="font-size:12px; color:#aaa; margin-top:10px; display:block;">SHOWTIMES (${labelShowtime})</span>
-                    <div class="time-grid">${movieTimeData.map(t => `<button class="time-btn">${t}</button>`).join('')}</div>
+                <div class="time-grid-container">
+                    <span style="font-size:12px; color:#aaa; margin-top:10px; display:block;">SHOWTIMES (${labelShowtime})</span>
+                    <div class="time-grid"></div>
                 </div>`;
+            
+            const timeGrid = wrapper.querySelector('.time-grid');
+            dynamicTimes.forEach(t => {
+                const timeBtn = document.createElement('button');
+                timeBtn.className = 'time-btn';
+                timeBtn.innerText = t;
+                // PASS CINEMA NAME AND TIME
+                timeBtn.onclick = function(e) {
+                    e.stopPropagation(); // Mencegah accordion toggle
+                    openSeatSelection(t, c.name);
+                };
+                timeGrid.appendChild(timeBtn);
+            });
+
             container.appendChild(wrapper);
         });
     }
 
+    // ==========================================
+    // === STEP 3: SEAT SELECTION LOGIC ===
+    // ==========================================
+    
+    // UPDATED: Added cinemaName parameter
+    function openSeatSelection(time, cinemaName) {
+        document.getElementById('ticketStep2').classList.add('hidden');
+        document.getElementById('ticketStep3').classList.remove('hidden');
+        document.getElementById('ticketBreadcrumb').innerText = "Select Seat";
+
+        // Update Info Bar
+        document.getElementById('seatMovieTitle').innerText = selectedMovieData.title;
+        document.getElementById('seatMovieRate').innerText = selectedMovieData.rate;
+        document.getElementById('seatMovieDur').innerText = selectedMovieData.dur;
+        document.getElementById('seatMovieFormat').innerText = activeFilter;
+
+        // --- NEW: Update Cinema Location and Time ---
+        document.getElementById('seatCinemaName').innerText = cinemaName;
+        document.getElementById('seatShowtime').innerText = time;
+
+        // Tentukan Logo Layar & Harga Dasar
+        const logoImg = document.getElementById('screenLogoImg');
+        const grid = document.getElementById('seatGrid');
+        
+        // RESET CLASS GRID
+        grid.className = 'seat-grid';
+
+        if (activeFilter === 'IMAX') {
+            logoImg.src = "IMAXICONWHITE.png";
+            currentPricePerSeat = 45000;
+        } else if (activeFilter === '4DX') {
+            logoImg.src = "4dx.png";
+            currentPricePerSeat = 80000;
+        } else if (activeFilter === 'Premiere') {
+            logoImg.src = "cinemapremiere.png";
+            currentPricePerSeat = 120000;
+            // TAMBAHKAN CLASS PREMIERE MODE
+            grid.classList.add('premiere-mode');
+        } else if (activeFilter === '3D') {
+            logoImg.src = "XLV2.png";
+            currentPricePerSeat = 35000;
+        } else {
+            logoImg.src = "XLV2.png"; // Default 2D/XLV
+            currentPricePerSeat = 30000;
+        }
+
+        renderSeatMap();
+    }
+
+    function renderSeatMap() {
+        const grid = document.getElementById('seatGrid');
+        grid.innerHTML = '';
+        selectedSeats.clear();
+        updateBookingSummary();
+
+        const isPremiere = activeFilter === 'Premiere';
+        
+        let rows, cols;
+        
+        if (isPremiere) {
+            // Layout Premiere: 4 Baris, 4 Kolom (2 Pasang)
+            rows = ['A', 'B', 'C', 'D'];
+            cols = 4;
+        } else {
+            // Layout Standard: 10 Baris, 20 Kolom
+            rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+            cols = 20;
+        }
+
+        rows.forEach(row => {
+            for (let i = 1; i <= cols; i++) {
+                const seatId = `${row}${i}`;
+                const seatDiv = document.createElement('div');
+                
+                seatDiv.className = 'seat-item available';
+                seatDiv.title = seatId; 
+
+                // --- CHANGE: NO SOLD SEATS LOGIC HERE ---
+                // Semua kursi tersedia (available)
+
+                // Click Event
+                seatDiv.onclick = function() {
+                    // Logic SOLD check removed as all are available
+                    
+                    if (selectedSeats.has(seatId)) {
+                        selectedSeats.delete(seatId);
+                        seatDiv.classList.remove('selected');
+                    } else {
+                        // Max 10 seats
+                        if (selectedSeats.size >= 10) {
+                            alert("Max 10 seats per transaction.");
+                            return;
+                        }
+                        selectedSeats.add(seatId);
+                        seatDiv.classList.add('selected');
+                    }
+                    updateBookingSummary();
+                };
+                
+                grid.appendChild(seatDiv);
+            }
+        });
+    }
+
+    function updateBookingSummary() {
+        const count = selectedSeats.size;
+        const total = count * currentPricePerSeat;
+        
+        document.getElementById('totalSeats').innerText = count;
+        document.getElementById('totalPrice').innerText = "Rp " + total.toLocaleString('id-ID');
+        
+        const btnCheckout = document.getElementById('btnCheckout');
+        if(count > 0) {
+            btnCheckout.style.opacity = "1";
+            btnCheckout.style.pointerEvents = "auto";
+        } else {
+            btnCheckout.style.opacity = "0.5";
+            btnCheckout.style.pointerEvents = "none";
+        }
+    }
+
+    document.getElementById('btnCheckout').onclick = function() {
+        if(selectedSeats.size === 0) return;
+        const seatsArr = Array.from(selectedSeats).sort().join(', ');
+        const total = document.getElementById('totalPrice').innerText;
+        const cinema = document.getElementById('seatCinemaName').innerText;
+        const time = document.getElementById('seatShowtime').innerText;
+
+        alert(`Booking Confirmed!\n\nMovie: ${selectedMovieData.title}\nPlace: ${cinema}\nTime: ${time}\nFormat: ${activeFilter}\nSeats: ${seatsArr}\nTotal: ${total}`);
+        closeModal();
+    };
+
+
+    // =========================================
+    
     window.openTicketModalWithMovie = function(title) {
-        // Search in both arrays
         const allMovies = [...ticketMovies, ...ticketAdvanceMovies];
         const movie = allMovies.find(m => m.title.trim().toLowerCase() === title.trim().toLowerCase());
         
+        ticketSearchQuery = "";
+        document.getElementById('movieSearchInput').value = "";
+        
         if (movie) {
+            const isNowPlaying = ticketMovies.some(m => m.title === movie.title);
+            if(isNowPlaying) tabNowPlaying.click();
+            else tabAdvance.click();
+            
             renderTicketStep1(); 
             document.getElementById('menuTicket').click(); 
             selectMovieForTicket(movie);
@@ -768,14 +1017,28 @@ document.addEventListener('DOMContentLoaded', function() {
     if(overlay) overlay.addEventListener('click', closeModal);
     ['closeRegister', 'closeCinema', 'closeLocation'].forEach(id => document.getElementById(id).addEventListener('click', closeModal));
     
+    // Close Ticket logic: handle Back navigation inside Modal
     document.getElementById('closeTicket').addEventListener('click', () => {
-        if(!document.getElementById('ticketStep2').classList.contains('hidden')) {
-            document.getElementById('ticketStep2').classList.add('hidden');
-            document.getElementById('ticketStep1').classList.remove('hidden');
+        const step3 = document.getElementById('ticketStep3');
+        const step2 = document.getElementById('ticketStep2');
+        const step1 = document.getElementById('ticketStep1');
+
+        if (!step3.classList.contains('hidden')) {
+            // Back from Step 3 -> Step 2
+            step3.classList.add('hidden');
+            step2.classList.remove('hidden');
+            document.getElementById('ticketBreadcrumb').innerText = selectedMovieData.title;
+        } else if (!step2.classList.contains('hidden')) {
+            // Back from Step 2 -> Step 1
+            step2.classList.add('hidden');
+            step1.classList.remove('hidden');
             document.getElementById('ticketBreadcrumb').innerText = "Tickets";
-            
-            // activeFilter reset not strictly needed as it resets on movie select
-        } else closeModal();
+            // Clear selections
+            selectedMovieData = null;
+        } else {
+            // Close Modal
+            closeModal();
+        }
     });
 
     const triggers = { 'btnLoginTrigger': 'loginModal', 'btnRegisterTrigger': 'registerModal', 'menuCinema': 'cinemaModal', 'menuTicket': 'ticketModal' };
@@ -787,9 +1050,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 renderCinemaList();
             }
             if(modalId === 'ticketModal') { 
+                ticketSearchQuery = "";
+                document.getElementById('movieSearchInput').value = "";
+                ticketTab = 'now';
+                tabNowPlaying.click();
+
                 renderTicketStep1(); 
                 document.getElementById('ticketStep1').classList.remove('hidden'); 
                 document.getElementById('ticketStep2').classList.add('hidden'); 
+                document.getElementById('ticketStep3').classList.add('hidden');
                 document.getElementById('ticketBreadcrumb').innerText = "Tickets"; 
             }
             document.querySelectorAll('.modal-center, .cinema-modal, .ticket-modal').forEach(m => m.classList.remove('show'));

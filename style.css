@@ -19,25 +19,87 @@
 body { background-color: var(--dark-bg); color: var(--text-main); overflow-x: hidden; min-height: 100vh; }
 body.no-scroll { overflow: hidden !important; }
 
-/* ================= LOADING SCREEN ================= */
+/* ================= NEW LOADING SCREEN (FULL BG) ================= */
 .loading-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background-color: #000; z-index: 9999;
     display: flex; justify-content: center; align-items: center;
-    transition: opacity 0.8s ease-out, visibility 0.8s;
+    transition: opacity 1s ease-out, visibility 1s;
+    overflow: hidden;
 }
 .loading-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-.loading-content { text-align: center; }
-.loading-logo { width: 150px; margin-bottom: 20px; animation: pulseLogo 2s infinite; }
-.loading-bar-container {
-    width: 200px; height: 4px; background: #333; border-radius: 2px; overflow: hidden; margin: 0 auto;
+
+/* Background Image Full */
+.loading-bg-full {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: url('thepremiere.jpg') center center / cover no-repeat;
+    z-index: 1;
+    opacity: 0;
+    animation: bgFadeIn 1.5s ease-out forwards;
 }
-.loading-bar {
-    width: 100%; height: 100%; background: var(--primary);
-    animation: loadingAnim 1.5s infinite ease-in-out; transform-origin: left;
+
+/* Dark Overlay */
+.loading-bg-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Kegelapan background */
+    backdrop-filter: blur(3px);
+    z-index: 2;
+    opacity: 0;
+    animation: overlayFadeIn 1s ease-out forwards 0.3s;
 }
-@keyframes pulseLogo { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.7; transform: scale(0.95); } }
-@keyframes loadingAnim { 0% { transform: scaleX(0); } 50% { transform: scaleX(1); } 100% { transform: scaleX(0); transform-origin: right; } }
+
+/* Content Wrapper (Center) */
+.loading-content-v2 {
+    position: relative;
+    z-index: 3;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+/* Logo Animation */
+.loading-main-logo {
+    width: 150px;
+    height: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: logoFadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    animation-delay: 0.8s;
+}
+
+/* Dots Animation (Below Logo) */
+.loading-dots-container {
+    display: flex; gap: 8px; margin-top: 20px;
+    opacity: 0;
+    animation: dotsFadeIn 0.5s ease forwards;
+    animation-delay: 1.5s;
+}
+
+.l-dot {
+    width: 8px; height: 8px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+.l-dot:nth-child(1) { animation-delay: -0.32s; }
+.l-dot:nth-child(2) { animation-delay: -0.16s; }
+
+/* Keyframes */
+@keyframes bgFadeIn {
+    0% { opacity: 0; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
+}
+@keyframes overlayFadeIn { to { opacity: 1; } }
+@keyframes logoFadeUp {
+    0% { opacity: 0; transform: translateY(30px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes dotsFadeIn { to { opacity: 1; } }
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
 
 /* Utility */
 .glass-panel { background: var(--glass-bg); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); }
@@ -252,6 +314,12 @@ body.no-scroll { overflow: hidden !important; }
 .tag-box.danger { border-color: #e74c3c; color: #e74c3c; }
 .tag-box.success { border-color: #2ecc71; color: #2ecc71; }
 
+.tag-box.release { 
+    border-color: #3498db; 
+    color: #3498db; 
+    background: rgba(52, 152, 219, 0.1);
+}
+
 /* Footer */
 .main-footer { border-top: 1px solid #222; margin-top: 80px; padding: 60px 0 40px 0; background: #0a0a0d; }
 .footer-partners { display: flex; justify-content: center; align-items: center; gap: 40px; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 1px solid #222; flex-wrap: wrap; }
@@ -282,9 +350,8 @@ body.no-scroll { overflow: hidden !important; }
     animation: popupFade 0.3s ease;
 }
 
-/* === FIX Z-INDEX MODAL TRAILER AGAR DI DEPAN TICKET MODAL === */
 #trailerModal {
-    z-index: 3000 !important; /* Prioritas tinggi */
+    z-index: 3000 !important; 
 }
 
 @keyframes popupFade { from { opacity: 0; transform: translate(-50%, -45%); } to { opacity: 1; transform: translate(-50%, -50%); } }
@@ -342,9 +409,8 @@ body.no-scroll { overflow: hidden !important; }
 .cinema-content, .ticket-content { overflow-y: auto; height: calc(100% - 130px); padding: 0; }
 .ticket-content { height: calc(100% - 70px); }
 
-/* === FIX SAFE AREA LIST BIOSKOP === */
 .cinema-list { 
-    padding: 20px 0 50px 0; /* Padding bawah 50px agar tidak mepet */
+    padding: 20px 0 50px 0; 
 }
 .cinema-list-item { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; border-bottom: 1px solid #222; cursor: pointer; transition: 0.2s; }
 .cinema-list-item:hover { background: #1a1a1a; }
@@ -353,6 +419,50 @@ body.no-scroll { overflow: hidden !important; }
 .cinema-logos { display: flex; gap: 10px; margin-top: 5px; align-items: center; }
 .cinema-feature-logo { height: 20px; width: auto; object-fit: contain; }
 .right-arrow { color: #fff; font-size: 12px; }
+
+/* === TICKET LIST & SEARCH STYLE === */
+.ticket-filter-header {
+    padding: 20px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+}
+.ticket-search-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+.ticket-search-wrapper i {
+    position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+    color: #777;
+}
+.ticket-search-input {
+    width: 100%;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    padding: 12px 12px 12px 40px;
+    color: #fff;
+    border-radius: 8px;
+    outline: none;
+    font-size: 14px;
+}
+.ticket-type-tabs {
+    display: flex; gap: 10px;
+}
+.tab-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid #444;
+    color: #aaa;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.3s;
+}
+.tab-btn.active {
+    background: var(--primary);
+    color: #000;
+    border-color: var(--primary);
+}
 
 .movie-select-item { 
     display: flex; justify-content: space-between; align-items: center; 
@@ -374,7 +484,7 @@ body.no-scroll { overflow: hidden !important; }
 .tm-header-container {
     position: relative;
     width: 100%;
-    height: 380px; /* Cukup besar */
+    height: 380px; 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -459,22 +569,64 @@ body.no-scroll { overflow: hidden !important; }
     background: #fff; color: #000;
 }
 
+/* === DATE SELECTOR BAR === */
+.date-selector-bar {
+    padding: 15px 25px 0 25px;
+    background: #111;
+}
+.date-scroll-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+.date-scroll-container::-webkit-scrollbar { height: 4px; }
+.date-scroll-container::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+.date-btn {
+    min-width: 70px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #222;
+    border: 1px solid #333;
+    color: #aaa;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex; flex-direction: column; gap: 2px;
+}
+.date-btn .d-day { font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.date-btn .d-num { font-size: 16px; font-weight: 800; color: #fff; }
+.date-btn:hover { border-color: #666; background: #2a2a2a; }
+.date-btn.active { background: var(--primary); border-color: var(--primary); color: #000; }
+.date-btn.active .d-num { color: #000; }
+
+
 /* === FILTER BAR === */
 .filter-bar {
     display: flex; gap: 10px; align-items: center;
     padding: 15px 25px;
     border-bottom: 1px solid #222;
     background: #151515;
-    flex-wrap: wrap; /* Allow wrapping on small screens */
+    flex-wrap: wrap; 
 }
 .filter-label { font-size: 13px; font-weight: 700; color: #888; margin-right: 5px; }
 .filter-btn {
     background: #222; border: 1px solid #333; color: #ccc;
     padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700;
     cursor: pointer; transition: 0.2s; margin-bottom: 5px;
+    display: flex; align-items: center; justify-content: center;
+    height: 32px; /* Fix height for logos */
+}
+.filter-btn img {
+    height: 16px;
+    width: auto;
+    filter: brightness(0) invert(0.8); /* Make slightly grey */
 }
 .filter-btn:hover { border-color: #666; color: #fff; }
+.filter-btn:hover img { filter: brightness(0) invert(1); }
 .filter-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+.filter-btn.active img { filter: brightness(0); /* Black logo */ }
 
 
 .accordion-cinema { border-bottom: 1px solid #222; }
@@ -489,10 +641,9 @@ body.no-scroll { overflow: hidden !important; }
 @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
 
 /* === TRAILER MODAL STYLE === */
-/* Style untuk Wrapper Close Button Trailer */
 .trailer-close-wrapper {
     position: absolute;
-    top: -40px; /* Di luar atas iframe */
+    top: -40px; 
     right: 0;
     z-index: 2005;
 }
@@ -507,6 +658,207 @@ body.no-scroll { overflow: hidden !important; }
     color: var(--primary);
     transform: scale(1.1);
 }
+
+/* =================== STEP 3: SEAT SELECTION STYLE =================== */
+
+/* Info Bar */
+.seat-info-bar {
+    padding: 15px 25px;
+    background: #1a1a1a;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0; /* Mencegah shrink pada flex column */
+}
+.seat-info-left {
+    display: flex;
+    flex-direction: column;
+}
+.seat-movie-title { font-size: 18px; font-weight: 800; color: #fff; }
+.seat-meta-info { display: flex; gap: 8px; }
+.format-tag { background: #333; color: #fff; border: 1px solid #555; }
+
+/* Scrollable Area */
+.seat-map-scroll-area {
+    flex: 1; /* Mengisi sisa ruang secara fleksibel */
+    overflow-x: auto; /* Scroll horizontal jika perlu */
+    overflow-y: auto; /* Scroll vertical */
+    padding: 30px;
+    background: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    /* width: 100%; Hapus fix width untuk flex layout yang benar */
+}
+
+/* Screen */
+.screen-container {
+    width: 600px; /* Fixed visual width */
+    margin-bottom: 50px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+.screen-curve {
+    width: 100%;
+    height: 60px;
+    border-top: 6px solid #ccc;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    box-shadow: 0 -15px 30px rgba(255,255,255,0.2);
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 2;
+}
+.screen-glow {
+    position: absolute;
+    top: 0; left: 10%; width: 80%; height: 100px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.1) 0%, transparent 100%);
+    filter: blur(20px);
+    z-index: 1;
+}
+.screen-logo-container {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+}
+.screen-logo { height: 25px; opacity: 0.5; }
+.screen-text { font-size: 10px; letter-spacing: 2px; color: #555; font-weight: 700; }
+
+/* Grid Kursi Default (A-J, 1-20) -> 20 kolom */
+.seat-grid-container {
+    padding-bottom: 30px;
+    flex-shrink: 0; /* Agar tidak terkompres */
+}
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(20, 1fr); 
+    gap: 8px; /* Jarak antar kursi */
+    row-gap: 12px;
+}
+
+/* Gap Lorong Tengah Default: Margin kanan di kursi ke-10 */
+.seat-grid .seat-item:nth-child(20n + 10) {
+    margin-right: 30px; 
+}
+
+/* === PREMIERE LAYOUT STYLE (4 Columns x 4 Rows, Joined Couples) === */
+.seat-grid.premiere-mode {
+    /* Gunakan max-content agar kolom tidak melar melebihi konten */
+    grid-template-columns: repeat(4, max-content);
+    gap: 0; 
+    column-gap: 2px;
+    row-gap: 20px;
+    
+    /* Center the entire grid block */
+    justify-content: center;
+}
+
+/* Reset default margin from standard layout */
+.seat-grid.premiere-mode .seat-item:nth-child(20n + 10) {
+    margin-right: 0; 
+}
+
+/* Gap Logic for Middle Aisle */
+.seat-grid.premiere-mode .seat-item:nth-child(4n + 2) {
+    margin-right: 60px; /* Spacer tengah */
+}
+
+/* JOINING LOGIC: Membuat kursi terlihat menyatu */
+
+/* Kursi Bagian Kiri (Kolom 1 & 3) */
+.seat-grid.premiere-mode .seat-item:nth-child(4n + 1),
+.seat-grid.premiere-mode .seat-item:nth-child(4n + 3) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: 0; /* Nempel ke kanan */
+    position: relative;
+    z-index: 1;
+}
+
+/* Kursi Bagian Kanan (Kolom 2 & 4) */
+.seat-grid.premiere-mode .seat-item:nth-child(4n + 2),
+.seat-grid.premiere-mode .seat-item:nth-child(4n + 4) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -2px; /* Menarik sedikit agar benar-benar menyatu */
+    position: relative;
+    z-index: 1;
+}
+
+/* Seat Item Style */
+.seat-item {
+    width: 25px; height: 25px;
+    background: #333;
+    border-radius: 4px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+    position: relative;
+}
+.seat-item:hover { background: #555; }
+.seat-item.selected { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+.seat-item.sold { background: #500; cursor: not-allowed; opacity: 0.5; }
+
+/* Seat Item Premiere Style (Lebih Besar & Mewah) */
+.seat-grid.premiere-mode .seat-item {
+    width: 60px; height: 50px;
+    border-radius: 6px;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background: linear-gradient(to bottom, #444, #222); /* Efek kulit */
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.1);
+}
+.seat-grid.premiere-mode .seat-item:hover {
+    background: linear-gradient(to bottom, #666, #333);
+}
+.seat-grid.premiere-mode .seat-item.selected {
+    background: var(--primary);
+    box-shadow: 0 0 15px var(--primary);
+}
+
+
+/* Legend */
+.seat-legend {
+    display: flex; gap: 20px; margin-top: 20px; flex-shrink: 0;
+}
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #aaa; }
+.seat-sample { width: 16px; height: 16px; border-radius: 3px; }
+.seat-sample.available { background: #333; }
+.seat-sample.selected { background: var(--primary); }
+.seat-sample.sold { background: #500; }
+
+/* Footer Booking */
+.seat-booking-footer {
+    height: 80px;
+    background: #111;
+    border-top: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    z-index: 10;
+    flex-shrink: 0; /* Footer tidak boleh mengecil */
+}
+.booking-summary { display: flex; flex-direction: column; }
+.seat-count-info { font-size: 12px; color: #888; }
+.total-price-info { font-size: 24px; font-weight: 800; color: #fff; }
+
+.btn-checkout {
+    background: var(--primary);
+    color: #000;
+    font-weight: 800;
+    padding: 12px 40px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-checkout:hover { transform: scale(1.05); box-shadow: 0 5px 20px rgba(0, 224, 176, 0.4); }
+
 
 /* ================= MEDIA QUERIES (RESPONSIVENESS) ================= */
 
@@ -532,34 +884,33 @@ body.no-scroll { overflow: hidden !important; }
     
     /* === FIX: CLOCK ON MOBILE === */
     .nav-center-clock { 
-        display: block; /* Tampilkan Jam */
+        display: block; 
         position: absolute;
         left: 50%;
         top: 50%;
         transform: translate(-50%, -50%);
-        font-size: 11px; /* Ukuran pas untuk mobile */
+        font-size: 11px; 
         font-weight: 800;
         text-shadow: 0 2px 4px rgba(0,0,0,0.8);
     } 
 
-    .nav-logo-img { height: 20px; /* Logo XLV Lebih Kecil */ }
-    .location-pill span { display: none; } /* Hide city name, only icon */
+    .nav-logo-img { height: 20px; }
+    .location-pill span { display: none; } 
     .location-pill { padding: 8px; border-radius: 50%; }
     
     .nav-right { gap: 10px; }
     .nav-link { font-size: 12px; }
     .btn-register { padding: 6px 15px; font-size: 12px; }
     #btnPromoTrigger i { margin-right: 0; }
-    #btnPromoTrigger { font-size: 0; } /* Hide Text "Promo", show Icon only */
+    #btnPromoTrigger { font-size: 0; } 
     #btnPromoTrigger i { font-size: 16px; margin: 0; }
     
     /* === FIX: HERO SECTION MOBILE LAYOUT === */
-    /* Membuat konten turun ke bawah (mendekati menu) untuk mengisi ruang kosong */
     .hero-slider { 
         height: 80vh; 
-        align-items: flex-end; /* Konten rata bawah */
+        align-items: flex-end; 
         justify-content: center; 
-        padding-bottom: 120px; /* Memberi ruang agar tidak tertutup menu */
+        padding-bottom: 120px; 
     }
     
     .hero-content { 
@@ -569,30 +920,30 @@ body.no-scroll { overflow: hidden !important; }
         display: flex; 
         flex-direction: column; 
         align-items: center;
-        margin-top: 0; /* Reset margin top */
+        margin-top: 0; 
     }
     
     .hero-title { 
         font-size: 32px; 
-        margin-bottom: 5px; /* Rapatkan jarak judul */
+        margin-bottom: 5px; 
     }
     
     .hero-meta { 
         justify-content: center; 
-        margin-bottom: 10px; /* Rapatkan jarak meta */
+        margin-bottom: 10px; 
     }
     
     .hero-synopsis { 
         font-size: 13px; 
         -webkit-line-clamp: 4; 
-        margin-bottom: 15px; /* Rapatkan jarak sinopsis ke tombol */
+        margin-bottom: 15px; 
         text-align: center;
     }
     
     .hero-buttons { 
         justify-content: center; 
         width: 100%; 
-        gap: 10px; /* Perkecil gap antar tombol */
+        gap: 10px; 
     }
     
     .btn-hero-primary, .btn-hero-secondary { 
@@ -612,7 +963,7 @@ body.no-scroll { overflow: hidden !important; }
         transform: translateX(-50%); 
         flex-direction: row; 
         top: auto; 
-        display: none; /* Sembunyikan dots di mobile agar lebih bersih (opsional) */
+        display: none; 
     }
 
     /* Quick Menu */
@@ -623,7 +974,6 @@ body.no-scroll { overflow: hidden !important; }
 
     /* Carousels & 3D Logic Fix */
     .carousel-3d-wrapper { height: 380px; }
-    /* Scale down the 3D container so pixel logic works on small screens */
     .carousel-container { zoom: 0.75; } 
     .nav-btn { width: 35px; height: 35px; font-size: 14px; }
 
@@ -649,18 +999,18 @@ body.no-scroll { overflow: hidden !important; }
         height: auto; 
         min-height: auto; 
         padding-top: 15px; 
-        padding-bottom: 0px !important; /* Hapus padding bawah */
+        padding-bottom: 0px !important; 
     }
     
     .tm-content-flex { 
         flex-direction: column; 
         align-items: center; 
         text-align: center; 
-        padding: 15px 20px 5px 20px; /* Padding bawah sangat kecil (5px) */
+        padding: 15px 20px 5px 20px; 
     }
     
     .tm-poster-img { 
-        width: 100px; /* Perkecil poster sedikit */
+        width: 100px; 
         height: 150px; 
         margin-bottom: 10px; 
         box-shadow: 0 5px 20px #000; 
@@ -678,21 +1028,19 @@ body.no-scroll { overflow: hidden !important; }
         max-width: 100%; 
         display: block; 
         font-size: 12px; 
-        -webkit-line-clamp: 3; /* Batasi 3 baris */
+        -webkit-line-clamp: 3; 
     }
     
-    /* === FIX: BUTTON WATCH TRAILER KE ATAS === */
     .tm-action-area { 
         width: 100%; 
         justify-content: center; 
-        margin-top: 8px; /* Jarak atas tombol diperkecil */
+        margin-top: 8px; 
         margin-bottom: 0;
     }
     .tm-trailer-btn { width: 100%; text-align: center; padding: 8px 0; font-size: 13px; }
 
-    /* === FILTER BAR (Agar lebih nempel ke atas) === */
     .filter-bar {
-        padding-top: 8px; /* Kurangi padding atas filter bar */
+        padding-top: 8px; 
     }
     
     /* Trailer Modal */
@@ -722,19 +1070,51 @@ body.no-scroll { overflow: hidden !important; }
     .cinema-list-item { padding: 15px; }
     .cinema-name { font-size: 14px; }
     .cinema-dist { font-size: 11px; }
+
+    /* === SEAT SELECTION MOBILE FIX === */
+    .seat-info-bar { padding: 10px 15px; }
+    .seat-movie-title { font-size: 15px; }
+    .seat-meta-info { gap: 5px; }
+    
+    /* Reset height agar flex bekerja */
+    .ticket-content { height: calc(100% - 70px); }
+    
+    /* Area Scroll: Kurangi padding agar lebih luas */
+    .seat-map-scroll-area { padding: 20px 10px; justify-content: flex-start; }
+    
+    /* Layar Bioskop: Kecilkan dan gunakan transform scale daripada zoom (lebih smooth) */
+    .screen-container { width: 100%; max-width: 320px; margin-bottom: 30px; transform: none; }
+    .screen-curve { height: 40px; }
+    
+    /* Footer Booking */
+    .seat-booking-footer { padding: 0 15px; height: 70px; }
+    .total-price-info { font-size: 18px; }
+    .btn-checkout { padding: 10px 20px; font-size: 14px; }
+    
+    /* Kursi di Mobile */
+    .seat-grid.premiere-mode .seat-item:nth-child(4n + 2) {
+        margin-right: 30px; /* Gap lebih kecil untuk mobile */
+    }
+    .seat-grid.premiere-mode .seat-item {
+         width: 40px; height: 35px;
+    }
 }
 
 /* --- SMALL MOBILE (iPhone SE, etc) (Max 480px) --- */
 @media(max-width: 480px) {
     .hero-title { font-size: 26px; }
-    .carousel-container { zoom: 0.6; } /* Scale 3D carousel smaller */
+    .carousel-container { zoom: 0.6; } 
     .carousel-3d-wrapper { height: 320px; }
     
     .city-grid-container { grid-template-columns: 1fr; }
     .gender-options { flex-direction: column; gap: 10px; }
     
-    /* Further compact Navbar */
     .nav-left { gap: 10px; }
     .navbar { padding: 10px; }
-    .btn-register { display: none; } /* Hide register button on super small screens, rely on Login link inside modal */
+    .btn-register { display: none; } 
+    
+    /* Kecilkan Grid Kursi sedikit lagi */
+    .seat-grid { gap: 4px; row-gap: 8px; }
+    .seat-item { width: 20px; height: 20px; }
+    .seat-grid.premiere-mode .seat-item { width: 40px; height: 35px; }
 }
