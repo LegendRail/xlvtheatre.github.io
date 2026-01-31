@@ -699,7 +699,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const releaseEl = document.getElementById('tmRelease');
         if (movie.releaseDate) {
-             releaseEl.innerText = "Release: " + movie.releaseDate;
+             releaseEl.innerText = "" + movie.releaseDate;
              releaseEl.classList.remove('hidden');
         } else {
              releaseEl.classList.add('hidden');
