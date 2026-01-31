@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { 
             title: "AVATAR: FIRE AND ASH", 
             rate: "R13+", dur: "3h 15m", 
-            genre: "Action / Sci-Fi / Adventure",
+            genre: "Action / Sci-Fi",
             synopsis: "Jake and Neytiri's family grapples with grief, encountering a new, aggressive Na'vi tribe, the Ash People, who are led by the fiery Varang.",
             img: "avatarheader.jpg",
             poster: "avatar.jpeg",
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { 
             title: "FIVE NIGHTS AT FREDDY'S 2", 
             rate: "R13+", dur: "1h 44m", 
-            genre: "Horror / Mystery / Thriller",
+            genre: "Mystery / Thriller",
             synopsis: "One year after the supernatural nightmare at Freddy Fazbear's Pizza, Abby runs away to reconnect with her animatronic friends.",
             img: "fnaf2header.jpg",
             poster: "fnaf2.jpg",
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { 
             title: "ZOOTOPIA 2", 
             rate: "SU", dur: "1h 50m", 
-            genre: "Animation / Adventure / Comedy",
+            genre: "Animation / Adventure",
             synopsis: "Brave rabbit cop Judy Hopps and her friend, the fox Nick Wilde, team up again to crack a new case.",
             img: "zootopia2header.jpg",
             poster: "zootopia2.jpg",
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { 
             title: "CHAINSAW MAN THE MOVIE: REZE ARC", 
             rate: "D17+", dur: "1h 41m", 
-            genre: "Anime / Action / Dark Fantasy",
+            genre: "Anime / Action",
             synopsis: "A direct sequel to the first season. Denji encounters a new romantic interest.",
             img: "chainsawmanheader.jpg",
             poster: "chainsawman.jpg",
@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { 
             title: "JUJUTSU KAISEN: EXECUTION", 
             rate: "R13+", dur: "1h 27m", 
-            genre: "Anime / Fantasy / Action",
+            genre: "Anime / Action",
             synopsis: "A veil abruptly descends over the busy Shibuya area amid the bustling Halloween crowds, trapping countless civilians inside. In the aftermath, ten colonies across Japan are transformed into dens of curses.",
             img: "jujutsukaisenheader.jpg",
             poster: "jujutsukaisen.jpg",
@@ -166,22 +166,22 @@ document.addEventListener('DOMContentLoaded', function() {
             img: "esoktanpaibuheader.jpg", poster: "esoktanpaibu.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yoma0", formats: ["2D", "Premiere"]
         },
         { 
-            title: "PAPA ZOLA THE MOVIE", rate: "SU", dur: "1h 51m", genre: "Animation / Adventure / Comedy / Action",
+            title: "PAPA ZOLA THE MOVIE", rate: "SU", dur: "1h 51m", genre: "Animation / Action",
             synopsis: "Papa Zola, a schoolteacher, and his gifted daughter Pipi go on small adventures that often escalate. Their escapades showcase their loving relationship and Pipi's intelligence, as they navigate whimsical situations together.",
             img: "papazolamovieheader.jpg", poster: "papazolamovie.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yon0o", formats: ["2D"]
         },
         { 
-            title: "5 CENTIMETERS PER SECOND (ANIMATION)", rate: "R13+", dur: "1h 03m", genre: "Anime / Drama / Slice of life / Romance",
+            title: "5 CENTIMETERS PER SECOND (ANIMATION)", rate: "R13+", dur: "1h 03m", genre: "Anime / Romance",
             synopsis: "Told in three interconnected segments, Takaki tells the story of his life as cruel winters, cold technology, and finally, adult obligations and responsibility converge to test the delicate petals of love.",
             img: "5cpsheader.png", poster: "5cps.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9ysyqw", formats: ["2D"]
         },
         { 
-            title: "MERAH PUTIH: ONE FOR ALL", rate: "SU", dur: "1h 10m", genre: "Animation / Adventure / Family",
+            title: "MERAH PUTIH: ONE FOR ALL", rate: "SU", dur: "1h 10m", genre: "Animation / Adventure",
             synopsis: "Eight diverse kids form Tim Merah Putih to guard Indonesia's flag for Independence Day. When it goes missing, they unite on a mission to retrieve it, learning teamwork, patriotism, and the power of unity in diversity.",
             img: "mpheader.jpg", poster: "mp.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9ysyvw", formats: ["2D"]
         },
         { 
-            title: "CROWS ZERO", rate: "D17+", dur: "2h 10m", genre: "Japanese / Action / Crime",
+            title: "CROWS ZERO", rate: "D17+", dur: "2h 10m", genre: "Action / Crime",
             synopsis: "A transfer student attempts to take over the most violent high school in the country, whose students form factions and battle each other for power.",
             img: "crowsheader.jpg", poster: "crows.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yszxi", formats: ["2D"]
         }
@@ -189,16 +189,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // === DATA COMING SOON (10 MOVIES) ===
     const comingSoonMovies = [
-        { title: "THE ODYSSEY", rate: "D17+", dur: "2h 40m", genre: "Action / Adventure / Fantasy", poster: "odyssey.jpg", img: "odysseyheader.jpg", trailer: "", synopsis: "After the Trojan War, Odysseus faces a dangerous voyage back to Ithaca, meeting creatures like the Cyclops Polyphemus, Sirens, and Circe along the way.", releaseDate: "17 July 2026" },
-        { title: "SPIDER-MAN: BRAND NEW DAY", rate: "R13+", dur: "TBC", genre: "Action / Sci-Fi / Superhero", poster: "spidermanbnd.jpg", img: "spidermanbndheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx48y", synopsis: "Peter Parker tries to focus on college and leave Spider-Man behind. But when a new threat endangers his friends, he must break his promise and suit up again, teaming with an unexpected ally to protect those he loves.", releaseDate: "31 July 2026" },
-        { title: "GOAT", rate: "SU", dur: "1h 40m", genre: "Animation / Family / Sport", poster: "goat.jpg", img: "goatheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx4l0", synopsis: "A small goat with big dreams gets a once-in-a-lifetime shot to join the pros and play roarball, a high-intensity, co-ed, full-contact sport dominated by the fastest, fiercest animals in the world.", releaseDate: "13 Feb 2026" },
-        { title: "MOANA", rate: "SU", dur: "TBC", genre: "Adventure / Family / Action", poster: "moana.jpg", img: "moanaheader.jpg", trailer: "", synopsis: "Live-action adaptation of the 2016 Disney animated film Moana.", releaseDate: "10 July 2026" },
-        { title: "AVENGERS: DOOMSDAY", rate: "R13+", dur: "3h 45m", genre: "Action / Sci-Fi / Superhero", poster: "doomsday.jpg", img: "doomsdayheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx3o2", synopsis: "Plot under wraps.", releaseDate: "18 December 2026" },
-        { title: "STAR WARS: THE MANDALORIAN AND GROGU", rate: "R13+", dur: "TBC", genre: "Action / Sci-Fi / Adventure", poster: "themandalorian.jpg", img: "themandalorianheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx5is", synopsis: "Once a lone bounty hunter, Mandalorian Din Djarin and his apprentice Grogu embark on an exciting new Star Wars adventure.", releaseDate: "22 May 2026" },
-        { title: "MASTERS OF THE UNIVERSE", rate: "R13+", dur: "TBC", genre: "Adventure / Sci-Fi / Superhero", poster: "mou.jpg", img: "mouheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx8tc", synopsis: "A young man on Earth discovers a fabulous secret legacy as the prince of an alien planet, and must recover a magic sword and return home to protect his kingdom.", releaseDate: "05 Jun 2026" },
-        { title: "THE SUPER MARIO GALAXY MOVIE", rate: "SU", dur: "TBC", genre: "Animation / Fantasy / Adventure", poster: "thesupermariogalaxy.jpg", img: "thesupermariogalaxyheader.jpg", trailer: "", synopsis: "Mario ventures into space, exploring cosmic worlds and tackling galactic challenges far from the familiar Mushroom Kingdom.", releaseDate: "01 April 2026" },
-        { title: "HOPPERS", rate: "SU", dur: "1h 45m", genre: "Animation / Comedy / Family", poster: "hoppers.jpg", img: "hoppersheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yxai0", synopsis: "A 19-year-old animal lover uses technology that places her consciousness into a robotic beaver to uncover mysteries within the animal world beyond her imagination.", releaseDate: "06 March 2026" },
-        { title: "TOY STORY 5", rate: "SU", dur: "TBC", genre: "Animation / Family / Adventure", poster: "toystory5.jpg", img: "toystory5header.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yxahy", synopsis: "Woody, Buzz, Jessie and the rest of the gang's jobs are challenged when they're introduced to electronics, a new threat to playtime.", releaseDate: "19 June 2026" }
+        { title: "THE ODYSSEY", rate: "D17+", dur: "2h 40m", genre: "Action / Adventure", poster: "odyssey.jpg", img: "odysseyheader.jpg", trailer: "", synopsis: "After the Trojan War, Odysseus faces a dangerous voyage back to Ithaca, meeting creatures like the Cyclops Polyphemus, Sirens, and Circe along the way.", releaseDate: "17 July 2026" },
+        { title: "SPIDER-MAN: BRAND NEW DAY", rate: "R13+", dur: "TBC", genre: "Action / Superhero", poster: "spidermanbnd.jpg", img: "spidermanbndheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx48y", synopsis: "Peter Parker tries to focus on college and leave Spider-Man behind. But when a new threat endangers his friends, he must break his promise and suit up again, teaming with an unexpected ally to protect those he loves.", releaseDate: "31 July 2026" },
+        { title: "GOAT", rate: "SU", dur: "1h 40m", genre: "Animation / Sport", poster: "goat.jpg", img: "goatheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx4l0", synopsis: "A small goat with big dreams gets a once-in-a-lifetime shot to join the pros and play roarball, a high-intensity, co-ed, full-contact sport dominated by the fastest, fiercest animals in the world.", releaseDate: "13 Feb 2026" },
+        { title: "MOANA", rate: "SU", dur: "TBC", genre: "Adventure / Family", poster: "moana.jpg", img: "moanaheader.jpg", trailer: "", synopsis: "Live-action adaptation of the 2016 Disney animated film Moana.", releaseDate: "10 July 2026" },
+        { title: "AVENGERS: DOOMSDAY", rate: "R13+", dur: "3h 45m", genre: "Action / Superhero", poster: "doomsday.jpg", img: "doomsdayheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx3o2", synopsis: "Plot under wraps.", releaseDate: "18 December 2026" },
+        { title: "STAR WARS: THE MANDALORIAN AND GROGU", rate: "R13+", dur: "TBC", genre: "Action / Sci-Fi", poster: "themandalorian.jpg", img: "themandalorianheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx5is", synopsis: "Once a lone bounty hunter, Mandalorian Din Djarin and his apprentice Grogu embark on an exciting new Star Wars adventure.", releaseDate: "22 May 2026" },
+        { title: "MASTERS OF THE UNIVERSE", rate: "R13+", dur: "TBC", genre: "Sci-Fi / Superhero", poster: "mou.jpg", img: "mouheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yx8tc", synopsis: "A young man on Earth discovers a fabulous secret legacy as the prince of an alien planet, and must recover a magic sword and return home to protect his kingdom.", releaseDate: "05 Jun 2026" },
+        { title: "THE SUPER MARIO GALAXY MOVIE", rate: "SU", dur: "TBC", genre: "Animation / Adventure", poster: "thesupermariogalaxy.jpg", img: "thesupermariogalaxyheader.jpg", trailer: "", synopsis: "Mario ventures into space, exploring cosmic worlds and tackling galactic challenges far from the familiar Mushroom Kingdom.", releaseDate: "01 April 2026" },
+        { title: "HOPPERS", rate: "SU", dur: "1h 45m", genre: "Animation / Comedy", poster: "hoppers.jpg", img: "hoppersheader.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yxai0", synopsis: "A 19-year-old animal lover uses technology that places her consciousness into a robotic beaver to uncover mysteries within the animal world beyond her imagination.", releaseDate: "06 March 2026" },
+        { title: "TOY STORY 5", rate: "SU", dur: "TBC", genre: "Animation / Adventure", poster: "toystory5.jpg", img: "toystory5header.jpg", trailer: "https://geo.dailymotion.com/player.html?video=x9yxahy", synopsis: "Woody, Buzz, Jessie and the rest of the gang's jobs are challenged when they're introduced to electronics, a new threat to playtime.", releaseDate: "19 June 2026" }
     ];
 
     // Helper to add formatting flags
@@ -1005,10 +1005,10 @@ document.addEventListener('DOMContentLoaded', function() {
     btnRedeem.addEventListener('click', function() {
         const code = document.getElementById('promoCodeInput').value;
         if(code === "adminganteng") {
-            alert("Selamat! Kode Promo Berhasil Digunakan!");
+            alert("Code Successfully Redeemed!");
             closeModal();
         } else {
-            alert("Kode Promo Salah atau Tidak Valid.");
+            alert("Incorrect Promo code, Try again.");
         }
     });
 
