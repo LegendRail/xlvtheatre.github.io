@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.openTrailerModal = function(embedUrl) {
         if(!embedUrl) {
-            alert("Trailer still not unavailable.");
+            alert("Trailer still unavailable.");
             return;
         }
         const finalUrl = embedUrl.includes("?") ? `${embedUrl}&autoplay=1` : `${embedUrl}?autoplay=1`;
