@@ -886,12 +886,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('btnCheckout').onclick = function() {
         if(selectedSeats.size === 0) return;
+        
+        // Ambil data untuk alert
         const seatsArr = Array.from(selectedSeats).sort().join(', ');
         const total = document.getElementById('totalPrice').innerText;
         const cinema = document.getElementById('seatCinemaName').innerText;
         const time = document.getElementById('seatShowtime').innerText;
 
+        // Tampilkan konfirmasi
         alert(`Booking Confirmed!\n\nMovie: ${selectedMovieData.title}\nPlace: ${cinema}\nTime: ${time}\nFormat: ${activeFilter}\nSeats: ${seatsArr}\nTotal: ${total}`);
+        
+        // === LOGIKA RESET SETELAH CHECKOUT ===
+        selectedSeats.clear();     // 1. Kosongkan data kursi yang dipilih
+        updateBookingSummary();    // 2. Reset tampilan harga jadi Rp 0 dan disable tombol checkout
+        
+        // Tutup modal dan kembali ke homepage
         closeModal();
     };
 
@@ -1017,26 +1026,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if(overlay) overlay.addEventListener('click', closeModal);
     ['closeRegister', 'closeCinema', 'closeLocation'].forEach(id => document.getElementById(id).addEventListener('click', closeModal));
     
-    // Close Ticket logic: handle Back navigation inside Modal
+    // === REVISED CLOSE TICKET LOGIC ===
     document.getElementById('closeTicket').addEventListener('click', () => {
         const step3 = document.getElementById('ticketStep3');
         const step2 = document.getElementById('ticketStep2');
-        const step1 = document.getElementById('ticketStep1');
-
+        
         if (!step3.classList.contains('hidden')) {
-            // Back from Step 3 -> Step 2
+            // Jika di Step 3 (Kursi) -> Kembali ke Step 2 (Detail)
             step3.classList.add('hidden');
             step2.classList.remove('hidden');
             document.getElementById('ticketBreadcrumb').innerText = selectedMovieData.title;
-        } else if (!step2.classList.contains('hidden')) {
-            // Back from Step 2 -> Step 1
-            step2.classList.add('hidden');
-            step1.classList.remove('hidden');
-            document.getElementById('ticketBreadcrumb').innerText = "Tickets";
-            // Clear selections
-            selectedMovieData = null;
         } else {
-            // Close Modal
+            // Jika di Step 2 atau Step 1 -> TUTUP SEMUA (Kembali ke Homepage)
             closeModal();
         }
     });
